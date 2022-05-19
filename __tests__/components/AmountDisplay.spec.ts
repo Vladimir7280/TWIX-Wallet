@@ -12,7 +12,7 @@ localVue.use(Vuex);
 const networkStore = {
     namespaced: true,
     getters: {
-        networkConfiguration: () => ({ maxMosaicDivisibility: 6 }),
+        networkConfiguration: () => ({ maxMosaicDivisibility: 4 }),
     },
 };
 const componentOptions = {

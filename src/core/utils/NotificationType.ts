@@ -29,7 +29,7 @@ export enum NotificationType {
     COSIGNATURE_ADDED = 'cosignature_added',
     DIVISIBILITY_INVALID = 'divisibility_invalid',
     DIVISIBILITY_LESS_THAN_0_ERROR = 'divisibility_can_not_less_than_0',
-    DIVISIBILITY_MORE_THAN_6_ERROR = 'divisibility_can_not_more_than_6',
+    DIVISIBILITY_MORE_THAN_6_ERROR = 'divisibility_can_not_more_than_4',
     DURATION_LESS_THAN_0_ERROR = 'duration_can_not_less_than_0',
     DURATION_MORE_THAN_1_YEARS_ERROR = 'duration_can_not_more_than_1_years',
     DURATION_MORE_THAN_10_YEARS_ERROR = 'duration_can_not_more_than_10_years',

@@ -60,7 +60,7 @@ export class AmountInputTs extends Vue {
         // update validation rule to reflect correct mosaic divisibility
         const chosenMosaic = this.mosaics.find((mosaic) => this.mosaicHex === mosaic.mosaicIdHex);
         const networkConfigurationDefaults = networkConfig[this.networkType || NetworkType.TEST_NET].networkConfigurationDefaults;
-        networkConfigurationDefaults.maxMosaicDivisibility = chosenMosaic ? chosenMosaic.divisibility : 6;
+        networkConfigurationDefaults.maxMosaicDivisibility = chosenMosaic ? chosenMosaic.divisibility : 4;
 
         // set validation rules for this field
         this.validationRules = createValidationRuleSet(networkConfigurationDefaults);

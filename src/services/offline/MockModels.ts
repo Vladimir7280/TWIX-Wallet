@@ -115,7 +115,7 @@ export const OfflineMultisigAccountGraphInfo = new MultisigAccountGraphInfo(new 
 export const OfflineNetworkCurrencies = (networkType: NetworkType): NetworkCurrencies => {
     const publicCurrency = new Currency({
         namespaceId: new NamespaceId('symbol.xym'),
-        divisibility: 6,
+        divisibility: 4,
         transferable: true,
         supplyMutable: false,
         restrictable: false,

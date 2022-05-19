@@ -47,8 +47,8 @@ export class DivisibilityInputTs extends Vue {
     }
 
     public set chosenValue(amount: string) {
-        if (parseInt(amount) > 6) {
-            amount = '6';
+        if (parseInt(amount) > 4) {
+            amount = '4';
         }
         if (parseInt(amount) < 0) {
             amount = '0';

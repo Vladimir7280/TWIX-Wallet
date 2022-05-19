@@ -35,7 +35,7 @@ export const createValidationRuleSet = ({
         addressOrAlias: 'required|addressOrAlias|addressOrAliasNetworkType:currentProfile',
         amount: `positiveDecimal|maxDecimals:${maxMosaicDivisibility}`,
         confirmPassword: 'required|confirmPassword:@newPassword',
-        divisibility: 'required|min_value:0|max_value:6|integer',
+        divisibility: 'required|min_value:0|max_value:4|integer',
         duration: `required|min_value:0|max_value:${maxMosaicDuration}`,
         generationHash: 'required|min:64|max:64',
         mosaicId: 'required|mosaicId',
