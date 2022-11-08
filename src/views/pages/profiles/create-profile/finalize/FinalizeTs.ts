@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NetworkType, Password } from 'symbol-sdk';
+import { NetworkType, Password } from 'symbol-sdk-twix';
 import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 // internal dependencies
 import { AccountService } from '@/services/AccountService';

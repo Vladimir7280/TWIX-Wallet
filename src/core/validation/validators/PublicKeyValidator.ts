@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NetworkType, PublicAccount } from 'symbol-sdk';
+import { NetworkType, PublicAccount } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { Validator, staticImplements } from './Validator';

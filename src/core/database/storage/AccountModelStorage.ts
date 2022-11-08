@@ -17,7 +17,7 @@
 import { VersionedObjectStorage } from '@/core/database/backends/VersionedObjectStorage';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 import { HarvestingService } from '@/services/HarvestingService';
-import { Address } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
 
 export class AccountModelStorage extends VersionedObjectStorage<Record<string, AccountModel>> {
     /**

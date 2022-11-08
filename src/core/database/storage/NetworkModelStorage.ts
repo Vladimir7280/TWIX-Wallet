@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NetworkType, NodeInfo, TransactionFees, RoleType } from 'symbol-sdk';
+import { NetworkType, NodeInfo, TransactionFees, RoleType } from 'symbol-sdk-twix';
 import { VersionedNetworkBasedObjectStorage } from '@/core/database/backends/VersionedNetworkBasedObjectStorage';
 import { NetworkModel } from '@/core/database/entities/NetworkModel';
 import { networkConfig } from '@/config';

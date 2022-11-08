@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Transaction, SignedTransaction, CosignatureTransaction, CosignatureSignedTransaction } from 'symbol-sdk';
+import { Transaction, SignedTransaction, CosignatureTransaction, CosignatureSignedTransaction } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';

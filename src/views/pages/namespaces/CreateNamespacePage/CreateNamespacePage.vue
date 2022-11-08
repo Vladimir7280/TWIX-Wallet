@@ -37,7 +37,7 @@
 <script lang="ts">
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
-import { NamespaceRegistrationType } from 'symbol-sdk';
+import { NamespaceRegistrationType } from 'symbol-sdk-twix';
 // child components
 import AssetFormPageWrap from '@/views/pages/assets/AssetFormPageWrap/AssetFormPageWrap.vue';
 import FormNamespaceRegistrationTransaction from '@/views/forms/FormNamespaceRegistrationTransaction/FormNamespaceRegistrationTransaction.vue';

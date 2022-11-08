@@ -20,7 +20,7 @@ import { PageInfo } from '@/store/Transaction';
 //@ts-ignore
 import Pagination from '@/components/Pagination/Pagination.vue';
 import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
-import { AccountInfo } from 'symbol-sdk';
+import { AccountInfo } from 'symbol-sdk-twix';
 
 @Component({
     components: { Pagination },

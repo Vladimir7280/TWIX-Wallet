@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { AliasAction, Deadline, MosaicAliasTransaction, MosaicId, NamespaceId, NetworkType } from 'symbol-sdk';
+import { AliasAction, Deadline, MosaicAliasTransaction, MosaicId, NamespaceId, NetworkType } from 'symbol-sdk-twix';
 import { createStore } from '@MOCKS/Store';
 import { ViewAliasTransaction } from '@/core/transactions/ViewAliasTransaction';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';

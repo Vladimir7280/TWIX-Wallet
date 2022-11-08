@@ -61,7 +61,7 @@
                     {{ $t('about_sdk_version') }}
                 </div>
                 <div class="value">
-                    {{ configs.packageLock.dependencies['symbol-sdk'].version }}
+                    {{ configs.packageLock.dependencies['symbol-sdk-twix'].version }}
                 </div>
             </div>
 
@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 // child components
 import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 import FormLabel from '@/components/FormLabel/FormLabel.vue';

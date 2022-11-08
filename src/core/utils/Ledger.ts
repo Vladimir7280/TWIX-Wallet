@@ -16,7 +16,7 @@
 // internal dependencies
 import * as BIPPath from 'bip32-path';
 // configuration
-import { Transaction, SignedTransaction, Convert, CosignatureSignedTransaction, AggregateTransaction } from 'symbol-sdk';
+import { Transaction, SignedTransaction, Convert, CosignatureSignedTransaction, AggregateTransaction } from 'symbol-sdk-twix';
 
 const SUPPORT_VERSION = { LEDGER_MAJOR_VERSION: '1', LEDGER_MINOR_VERSION: '0', LEDGER_PATCH_VERSION: '0' };
 const CLA_FIELD = 0xe0;

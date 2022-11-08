@@ -1,6 +1,6 @@
 // external dependenies
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Transaction } from 'symbol-sdk';
+import { Transaction } from 'symbol-sdk-twix';
 import { mapGetters } from 'vuex';
 // child components
 // @ts-ignore

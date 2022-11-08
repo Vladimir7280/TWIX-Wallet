@@ -27,7 +27,7 @@ import {
     Page,
     TransactionStatus,
     Order,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as _ from 'lodash';

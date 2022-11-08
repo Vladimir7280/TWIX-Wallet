@@ -1,7 +1,7 @@
 // external dependencies
 import { extend } from 'vee-validate';
 import i18n from '@/language';
-import { Account, Address, NetworkType, Password, NamespaceId } from 'symbol-sdk';
+import { Account, Address, NetworkType, Password, NamespaceId } from 'symbol-sdk-twix';
 // internal dependencies
 import { ProfileService } from '@/services/ProfileService';
 import { NotificationType } from '@/core/utils/NotificationType';

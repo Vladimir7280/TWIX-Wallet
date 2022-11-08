@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { CosignatureSignedTransaction, SignedTransaction, Transaction } from 'symbol-sdk';
+import { CosignatureSignedTransaction, SignedTransaction, Transaction } from 'symbol-sdk-twix';
 
 export class BroadcastResult {
     /**

@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Address, NamespaceId } from 'symbol-sdk';
+import { Address, NamespaceId } from 'symbol-sdk-twix';
 
 @Component
 export class AddressDisplayTs extends Vue {

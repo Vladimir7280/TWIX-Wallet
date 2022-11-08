@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 // external dependencies
-import { Crypto, Password, Account, AccountRepository, AccountInfo, AccountType as sdkAccountType } from 'symbol-sdk';
+import { Crypto, Password, Account, AccountRepository, AccountInfo, AccountType as sdkAccountType } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { AccountService } from './AccountService';

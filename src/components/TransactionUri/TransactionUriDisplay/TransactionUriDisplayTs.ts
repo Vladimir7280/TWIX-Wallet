@@ -1,4 +1,4 @@
-import { Transaction, TransactionMapping } from 'symbol-sdk';
+import { Transaction, TransactionMapping } from 'symbol-sdk-twix';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import { TransactionURI } from 'symbol-uri-scheme';

@@ -346,7 +346,7 @@ NOTE: We have known issues which have been logged into github and will look for 
 #### Changes
 
 - Upgraded symbol-hd-wallets, symbol-qr-library and symbol-uri-scheme with removed Symbol-SDK dependency
-- Upgraded symbol-sdk to latest v0.21.13 alpha (0.10.x compat)
+- Upgraded symbol-sdk-twix to latest v0.21.13 alpha (0.10.x compat)
 - Allow multiple private key accounts to be imported into the same profile as the mnemonic account.
 - Profile backup is now using Symbole-Paper-Wallet with multiple accounts support.
 - Applied the first iteration of UI implementation.
@@ -376,7 +376,7 @@ NOTE: We have known issues which have been logged into github and will look for 
 #### Changes
 
 - Upgraded symbol-hd-wallets and symbol-qr-library to use `next` tag
-- Upgraded symbol-sdk to latest v0.20.8 alpha (0.10.x compat)
+- Upgraded symbol-sdk-twix to latest v0.20.8 alpha (0.10.x compat)
 - Added new testnet nodes in config/network.conf.json
 
 #### Fixed

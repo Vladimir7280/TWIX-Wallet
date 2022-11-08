@@ -1,4 +1,4 @@
-import { NetworkType, NodeHealth, NodeInfo, NodeRepository, NodeTime, ServerInfo, StorageInfo } from 'symbol-sdk';
+import { NetworkType, NodeHealth, NodeInfo, NodeRepository, NodeTime, ServerInfo, StorageInfo } from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 import { OfflineNodeInfo, OfflineStorageInfo } from '@/services/offline/MockModels';
 

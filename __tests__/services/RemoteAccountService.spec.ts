@@ -24,7 +24,7 @@ import {
     AccountType as sdkAccountType,
     RepositoryFactory,
     NetworkCurrencies,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { RemoteAccountService } from '@/services/RemoteAccountService';
 import { WalletsModel2 } from '@MOCKS/Accounts';
 import { getTestProfile } from '@MOCKS/profiles';

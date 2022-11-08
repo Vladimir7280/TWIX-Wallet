@@ -15,7 +15,7 @@
  */
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { TransactionQR } from 'symbol-qr-library';
-import { NetworkType, TransferTransaction, Address } from 'symbol-sdk';
+import { NetworkType, TransferTransaction, Address } from 'symbol-sdk-twix';
 
 import { QRCodeDetailItem } from '@/components/QRCode/QRCodeActions/TemplateQRAction/TemplateQRActionTs';
 // @ts-ignore

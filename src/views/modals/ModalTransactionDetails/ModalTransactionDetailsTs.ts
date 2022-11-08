@@ -14,7 +14,7 @@
  *
  */
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Transaction } from 'symbol-sdk';
+import { Transaction } from 'symbol-sdk-twix';
 
 // child components
 // @ts-ignore

@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Address, Transaction, TransactionType } from 'symbol-sdk';
+import { Address, Transaction, TransactionType } from 'symbol-sdk-twix';
 // @ts-ignore
 import AddressDisplay from '@/components/AddressDisplay/AddressDisplay.vue';
 import { mapGetters } from 'vuex';

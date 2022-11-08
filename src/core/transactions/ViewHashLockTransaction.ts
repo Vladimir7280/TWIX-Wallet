@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { HashLockTransaction } from 'symbol-sdk';
+import { HashLockTransaction } from 'symbol-sdk-twix';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 import { AttachedMosaic } from '@/services/MosaicService';

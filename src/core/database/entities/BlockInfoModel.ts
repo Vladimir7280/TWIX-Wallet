@@ -14,7 +14,7 @@
  *
  */
 
-import { BlockInfo } from 'symbol-sdk';
+import { BlockInfo } from 'symbol-sdk-twix';
 
 export class BlockInfoModel {
     public readonly height: string;

@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Account, Crypto, Password } from 'symbol-sdk';
+import { Account, Crypto, Password } from 'symbol-sdk-twix';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // child components

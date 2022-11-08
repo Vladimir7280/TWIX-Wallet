@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { MosaicId, NamespaceId } from 'symbol-sdk';
+import { MosaicId, NamespaceId } from 'symbol-sdk-twix';
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies

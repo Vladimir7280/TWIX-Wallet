@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 // external dependencies
-import { AccountKeyLinkTransaction, LinkAction } from 'symbol-sdk';
+import { AccountKeyLinkTransaction, LinkAction } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { TransactionView } from './TransactionView';

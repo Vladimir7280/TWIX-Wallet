@@ -15,7 +15,7 @@
  */
 
 import { Formatters } from '@/core/utils/Formatters';
-import { Convert, Metadata, MetadataType } from 'symbol-sdk';
+import { Convert, Metadata, MetadataType } from 'symbol-sdk-twix';
 
 /**
  * Stored POJO that holds mosaic information.

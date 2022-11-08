@@ -6,7 +6,7 @@ import FormRow from '@/components/FormRow/FormRow.vue';
 
 //@ts-ignore
 import { mapGetters } from 'vuex';
-import { RentalFees } from 'symbol-sdk';
+import { RentalFees } from 'symbol-sdk-twix';
 export type RentalFeesType = 'mosaic' | 'root-namespace' | 'child-namespace';
 @Component({
     components: {

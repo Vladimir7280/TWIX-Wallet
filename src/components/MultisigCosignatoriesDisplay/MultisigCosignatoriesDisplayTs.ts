@@ -15,7 +15,7 @@
  */
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MultisigAccountInfo, Address } from 'symbol-sdk';
+import { MultisigAccountInfo, Address } from 'symbol-sdk-twix';
 
 // child components
 // @ts-ignore

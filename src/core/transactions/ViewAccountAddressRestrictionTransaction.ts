@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 // external dependencies
-import { AccountAddressRestrictionTransaction, Address, AddressRestrictionFlag } from 'symbol-sdk';
+import { AccountAddressRestrictionTransaction, Address, AddressRestrictionFlag } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { TransactionView } from './TransactionView';

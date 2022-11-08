@@ -29,7 +29,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { TransactionView } from '@/core/transactions/TransactionView';
 // @ts-ignore
 import TransactionDetailRow from '@/components/TransactionDetails/TransactionDetailRow/TransactionDetailRow.vue';
-import { Transaction } from 'symbol-sdk';
+import { Transaction } from 'symbol-sdk-twix';
 
 @Component({ components: { TransactionDetailRow } })
 export default class DetailView<T extends Transaction> extends Vue {

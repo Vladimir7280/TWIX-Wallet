@@ -31,7 +31,7 @@ import {
     NetworkType,
     PublicAccount,
     RepositoryFactory,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import Vue from 'vue';
 // internal dependencies
 import { $eventBus } from '../events';

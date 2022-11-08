@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType, NodeInfo, TransactionFees } from 'symbol-sdk';
+import { NetworkType, NodeInfo, TransactionFees } from 'symbol-sdk-twix';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 
 /**

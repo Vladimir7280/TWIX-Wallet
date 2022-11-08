@@ -16,7 +16,7 @@
 
 // internal dependencies
 import { BlockInfoModel } from '@/core/database/entities/BlockInfoModel';
-import { RepositoryFactory, UInt64 } from 'symbol-sdk';
+import { RepositoryFactory, UInt64 } from 'symbol-sdk-twix';
 import { BlockService } from '@/services/BlockService';
 import { first } from 'rxjs/operators';
 

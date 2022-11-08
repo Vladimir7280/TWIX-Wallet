@@ -17,7 +17,7 @@
 // external dependencies
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';
 import i18n from '@/language';
-import { AccountOperationRestrictionTransaction, OperationRestrictionFlag } from 'symbol-sdk';
+import { AccountOperationRestrictionTransaction, OperationRestrictionFlag } from 'symbol-sdk-twix';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 

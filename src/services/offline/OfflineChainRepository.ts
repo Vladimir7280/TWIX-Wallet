@@ -1,4 +1,4 @@
-import { ChainInfo, ChainRepository } from 'symbol-sdk';
+import { ChainInfo, ChainRepository } from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 import { OfflineChainInfo } from '@/services/offline/MockModels';
 

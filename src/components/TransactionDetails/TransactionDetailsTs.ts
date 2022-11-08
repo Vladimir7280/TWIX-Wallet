@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { AggregateTransaction, Transaction } from 'symbol-sdk';
+import { AggregateTransaction, Transaction } from 'symbol-sdk-twix';
 
 // child components
 // @ts-ignore

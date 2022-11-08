@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { VrfKeyLinkTransaction, LinkAction } from 'symbol-sdk';
+import { VrfKeyLinkTransaction, LinkAction } from 'symbol-sdk-twix';
 import { TransactionView } from './TransactionView';
 import i18n from '@/language';
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, MetadataType, PublicAccount, RepositoryFactory, Transaction } from 'symbol-sdk';
+import { Address, MetadataType, PublicAccount, RepositoryFactory, Transaction } from 'symbol-sdk-twix';
 // @ts-ignore
 import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 // @ts-ignore

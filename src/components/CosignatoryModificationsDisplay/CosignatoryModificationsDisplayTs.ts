@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 // child components
 import { ValidationProvider } from 'vee-validate';

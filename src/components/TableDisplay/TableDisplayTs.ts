@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Address, AliasAction, MosaicId, NamespaceId } from 'symbol-sdk';
+import { Address, AliasAction, MosaicId, NamespaceId } from 'symbol-sdk-twix';
 // internal dependencies
 import {
     AssetTableService,

@@ -14,7 +14,7 @@
  *
  */
 import { Store } from 'vuex';
-import { AggregateTransactionInfo, Transaction, TransactionInfo } from 'symbol-sdk';
+import { AggregateTransactionInfo, Transaction, TransactionInfo } from 'symbol-sdk-twix';
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';
 import i18n from '@/language';
 import { TransactionStatus } from '@/core/transactions/TransactionStatus';

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { AccountInfo, AccountRepository, AccountSearchCriteria, Address, MerkleStateInfo, Page, PaginationStreamer } from 'symbol-sdk';
+import { AccountInfo, AccountRepository, AccountSearchCriteria, Address, MerkleStateInfo, Page, PaginationStreamer } from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 import { OfflineAccountInfo } from '@/services/offline/MockModels';
 

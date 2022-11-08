@@ -28,7 +28,7 @@ import FormRow from '@/components/FormRow/FormRow.vue';
 
 // configuration
 import { networkConfig } from '@/config';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 @Component({
     components: {

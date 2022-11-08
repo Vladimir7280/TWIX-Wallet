@@ -16,7 +16,7 @@
 
 // import external components
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MetadataType } from 'symbol-sdk';
+import { MetadataType } from 'symbol-sdk-twix';
 
 // import internal components
 import { MetadataModel } from '@/core/database/entities/MetadataModel';

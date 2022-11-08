@@ -31,7 +31,7 @@ import FormInputEditable from '@/components/FormInputEditable/FormInputEditable.
 import ModalConfirm from '@/views/modals/ModalConfirm/ModalConfirm.vue';
 import { AddressBook, IContact } from 'symbol-address-book';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
-import { Address } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
 
 @Component({
     components: {

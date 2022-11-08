@@ -30,7 +30,7 @@ import {
     RepositoryFactoryHttp,
     SignedTransaction,
     UInt64,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import Vue from 'vue';
 // internal dependencies
 import { AwaitLock } from './AwaitLock';

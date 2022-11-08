@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Address, MerkleStateInfo, MultisigAccountGraphInfo, MultisigAccountInfo, MultisigRepository } from 'symbol-sdk';
+import { Address, MerkleStateInfo, MultisigAccountGraphInfo, MultisigAccountInfo, MultisigRepository } from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 import { OfflineMultisigAccountGraphInfo } from '@/services/offline/MockModels';
 

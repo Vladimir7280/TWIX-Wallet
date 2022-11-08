@@ -18,7 +18,7 @@ import { appConfig } from '@/config';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 
 import { networkConfig } from '@/config';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 const { MIN_PASSWORD_LENGTH } = appConfig.constants;
 

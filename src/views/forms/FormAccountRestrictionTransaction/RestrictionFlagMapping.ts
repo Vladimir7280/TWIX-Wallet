@@ -17,7 +17,7 @@
 import { RestrictionDirection } from '@/components/RestrictionDirectionInput/RestrictionDirectionInput.vue';
 // @ts-ignore
 import { RestrictionBlockType } from '@/components/RestrictionTypeInput/RestrictionTypeInput.vue';
-import { AddressRestrictionFlag, MosaicRestrictionFlag, OperationRestrictionFlag } from 'symbol-sdk';
+import { AddressRestrictionFlag, MosaicRestrictionFlag, OperationRestrictionFlag } from 'symbol-sdk-twix';
 import { AccountRestrictionTxType } from './FormAccountRestrictionTransactionTs';
 // @ts-ignore
 

@@ -14,7 +14,7 @@
  *
  */
 
-import { Address, PublicAccount } from 'symbol-sdk';
+import { Address, PublicAccount } from 'symbol-sdk-twix';
 
 export class AccountType {
     public static readonly SEED: number = 1;

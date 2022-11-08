@@ -15,7 +15,7 @@
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Account, NetworkType, Password, Crypto, Address } from 'symbol-sdk';
+import { Account, NetworkType, Password, Crypto, Address } from 'symbol-sdk-twix';
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 // child components

@@ -20,7 +20,7 @@ import { appConfig } from '@/config';
 import { networkConfig } from '@/config';
 import i18n from '@/language';
 import { SettingsModelStorage } from '@/core/database/storage/SettingsModelStorage';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 /**
  * Service in charge of loading and storing the SettingsModel from local storage.

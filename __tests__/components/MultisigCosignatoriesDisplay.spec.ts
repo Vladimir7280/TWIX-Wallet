@@ -17,7 +17,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 // @ts-ignore
 import MultisigCosignatoriesDisplay from '@/components/MultisigCosignatoriesDisplay/MultisigCosignatoriesDisplay';
-import { MultisigAccountInfo, NetworkType, PublicAccount } from 'symbol-sdk';
+import { MultisigAccountInfo, NetworkType, PublicAccount } from 'symbol-sdk-twix';
 import i18n from '@/language/index';
 
 const networkType = NetworkType.MAIN_NET;

@@ -14,7 +14,7 @@
  *
  */
 /// region custom types
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 type NetworkNodeEntry = { value: NetworkType; label: string };
 

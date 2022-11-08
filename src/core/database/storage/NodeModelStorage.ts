@@ -18,7 +18,7 @@ import { VersionedObjectStorage } from '@/core/database/backends/VersionedObject
 import { NodeModel } from '@/core/database/entities/NodeModel';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { VersionedModel } from '@/core/database/entities/VersionedModel';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 export class NodeModelStorage extends VersionedObjectStorage<NodeModel[]> {
     /**

@@ -31,7 +31,7 @@ import ModalFormProfileUnlock from '@/views/modals/ModalFormProfileUnlock/ModalF
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { FilterHelpers } from '@/core/utils/FilterHelpers';
 import { AddressBook } from 'symbol-address-book/AddressBook';
-import { Address } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
 
 @Component({
     components: {

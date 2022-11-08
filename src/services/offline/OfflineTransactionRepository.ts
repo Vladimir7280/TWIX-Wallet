@@ -9,7 +9,7 @@ import {
     TransactionGroup,
     TransactionRepository,
     TransactionSearchCriteria,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 
 export class OfflineTransactionRepository implements TransactionRepository {

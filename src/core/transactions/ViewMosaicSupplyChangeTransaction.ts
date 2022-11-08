@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { MosaicSupplyChangeAction, MosaicSupplyChangeTransaction } from 'symbol-sdk';
+import { MosaicSupplyChangeAction, MosaicSupplyChangeTransaction } from 'symbol-sdk-twix';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';

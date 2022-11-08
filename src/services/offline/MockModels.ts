@@ -19,11 +19,11 @@ import {
     StorageInfo,
     TransactionFees,
     UInt64,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { NodeIdentityEqualityStrategy } from 'symbol-openapi-typescript-fetch-client';
-import { Address } from 'symbol-sdk';
-import { AccountType } from 'symbol-sdk';
-import { SupplementalPublicKeys } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
+import { AccountType } from 'symbol-sdk-twix';
+import { SupplementalPublicKeys } from 'symbol-sdk-twix';
 import { networkConfig } from '@/config';
 
 export const OfflineUrl = 'http://mock:3000';

@@ -12,7 +12,7 @@ import { URLHelpers } from '@/core/utils/URLHelpers';
 import { NotificationType } from '@/core/utils/NotificationType';
 import { mapGetters } from 'vuex';
 import { NodeModel } from '@/core/database/entities/NodeModel';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 import { NetworkService } from '@/services/NetworkService';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 

@@ -15,7 +15,7 @@
  */
 
 import { BlockInfoModelStorage } from '@/core/database/storage/BlockInfoModelStorage';
-import { RepositoryFactory, UInt64 } from 'symbol-sdk';
+import { RepositoryFactory, UInt64 } from 'symbol-sdk-twix';
 import { BlockInfoModel } from '@/core/database/entities/BlockInfoModel';
 import { Observable, of } from 'rxjs';
 import { flatMap, map, tap } from 'rxjs/operators';

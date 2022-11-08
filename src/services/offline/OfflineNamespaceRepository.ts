@@ -12,7 +12,7 @@ import {
     NamespaceSearchCriteria,
     Page,
     PaginationStreamer,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { Observable, of } from 'rxjs';
 import { OfflineAccountNames, OfflineNamespaceNames } from '@/services/offline/MockModels';
 

@@ -15,7 +15,7 @@
  */
 import { mapGetters } from 'vuex';
 import { Component, Vue } from 'vue-property-decorator';
-import { NetworkType, Password } from 'symbol-sdk';
+import { NetworkType, Password } from 'symbol-sdk-twix';
 import VideoBackground from 'vue-responsive-video-background-player';
 
 // internal dependencies

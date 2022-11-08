@@ -12,7 +12,7 @@ import FormRow from '@/components/FormRow/FormRow.vue';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 // @ts-ignore
 import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
-import { TransactionMapping } from 'symbol-sdk';
+import { TransactionMapping } from 'symbol-sdk-twix';
 
 @Component({
     components: {

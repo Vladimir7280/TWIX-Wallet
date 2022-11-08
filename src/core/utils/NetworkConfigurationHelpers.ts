@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkConfiguration, NetworkType } from 'symbol-sdk';
+import { NetworkConfiguration, NetworkType } from 'symbol-sdk-twix';
 import { Formatters } from '@/core/utils/Formatters';
 import { TimeHelpers } from '@/core/utils/TimeHelpers';
 

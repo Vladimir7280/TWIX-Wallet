@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { AccountRestriction, Address, MosaicId, RepositoryFactory } from 'symbol-sdk';
+import { AccountRestriction, Address, MosaicId, RepositoryFactory } from 'symbol-sdk-twix';
 import Vue from 'vue';
 // internal dependencies
 import { AwaitLock } from './AwaitLock';

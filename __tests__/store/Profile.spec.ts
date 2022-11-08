@@ -16,7 +16,7 @@
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import ProfileStore from '@/store/Profile';
 import flushPromises from 'flush-promises';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 describe('store/Profile', () => {
     describe('action "RESET_STATE" should', () => {

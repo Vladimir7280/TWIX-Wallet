@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { AccountInfo } from 'symbol-sdk';
+import { AccountInfo } from 'symbol-sdk-twix';
 // internal dependencies
 import { mapGetters } from 'vuex';
 import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';

@@ -15,7 +15,7 @@
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { AddressQR } from 'symbol-qr-library';
-import { Address } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
 import { mapGetters } from 'vuex';
 import { IContact } from 'symbol-address-book';
 // @ts-ignore

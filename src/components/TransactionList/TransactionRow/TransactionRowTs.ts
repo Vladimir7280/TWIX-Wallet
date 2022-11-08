@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { MosaicId, NamespaceId, Transaction, TransactionType, TransferTransaction } from 'symbol-sdk';
+import { MosaicId, NamespaceId, Transaction, TransactionType, TransferTransaction } from 'symbol-sdk-twix';
 // internal dependencies
 import { Formatters } from '@/core/utils/Formatters';
 import { TimeHelpers } from '@/core/utils/TimeHelpers';

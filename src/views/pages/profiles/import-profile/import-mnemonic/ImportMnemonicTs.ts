@@ -20,7 +20,7 @@ import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 
 import { NotificationType } from '@/core/utils/NotificationType';
-import { Password, Crypto } from 'symbol-sdk';
+import { Password, Crypto } from 'symbol-sdk-twix';
 // @ts-ignore
 import MnemonicInput from '@/components/MnemonicInput/MnemonicInput.vue';
 import { ProfileService } from '@/services/ProfileService';

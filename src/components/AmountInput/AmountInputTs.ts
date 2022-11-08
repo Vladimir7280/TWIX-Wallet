@@ -25,7 +25,7 @@ import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 import { mapGetters } from 'vuex';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 import { networkConfig } from '@/config';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 
 @Component({
     components: {

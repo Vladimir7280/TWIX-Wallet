@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Address, NetworkType, PublicAccount, RepositoryFactory } from 'symbol-sdk';
+import { Address, NetworkType, PublicAccount, RepositoryFactory } from 'symbol-sdk-twix';
 // internal dependencies
 import { AddressValidator, PublicKeyValidator } from '@/core/validation/validators';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';

@@ -15,7 +15,7 @@
  */
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MultisigAccountInfo } from 'symbol-sdk';
+import { MultisigAccountInfo } from 'symbol-sdk-twix';
 // internal dependencies
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
 // child components

@@ -14,7 +14,7 @@
  *
  */
 import Vue from 'vue';
-import { AccountInfo, Address, MosaicId, RepositoryFactory } from 'symbol-sdk';
+import { AccountInfo, Address, MosaicId, RepositoryFactory } from 'symbol-sdk-twix';
 // internal dependencies
 import { AwaitLock } from './AwaitLock';
 import { MosaicService } from '@/services/MosaicService';

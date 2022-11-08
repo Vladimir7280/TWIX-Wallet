@@ -23,7 +23,7 @@ import FormRow from '@/components/FormRow/FormRow.vue';
 
 // @ts-ignore
 import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
-import { CosignatureSignedTransaction, SignedTransaction, TransactionMapping } from 'symbol-sdk';
+import { CosignatureSignedTransaction, SignedTransaction, TransactionMapping } from 'symbol-sdk-twix';
 
 @Component({
     components: { FormWrapper, FormRow, ErrorTooltip, ValidationProvider },

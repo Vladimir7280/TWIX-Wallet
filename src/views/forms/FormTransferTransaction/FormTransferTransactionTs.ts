@@ -28,7 +28,7 @@ import {
     Account,
     PublicAccount,
     SignedTransaction,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies

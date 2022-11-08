@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { MosaicId, MosaicSupplyChangeAction, MosaicSupplyChangeTransaction, Transaction, UInt64 } from 'symbol-sdk';
+import { MosaicId, MosaicSupplyChangeAction, MosaicSupplyChangeTransaction, Transaction, UInt64 } from 'symbol-sdk-twix';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 

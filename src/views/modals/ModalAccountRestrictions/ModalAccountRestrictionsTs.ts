@@ -28,7 +28,7 @@ import FormNodeEdit from '@/views/forms/FormNodeEdit/FormNodeEdit.vue';
 import AccountRestrictionsList from '@/components/AccountRestrictionsList/AccountRestrictionsList.vue';
 //@ts-ignore
 import ButtonAdd from '@/components/ButtonAdd/ButtonAdd.vue';
-import { AccountRestriction } from 'symbol-sdk';
+import { AccountRestriction } from 'symbol-sdk-twix';
 
 /**
  * Settings pages

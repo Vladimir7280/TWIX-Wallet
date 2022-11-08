@@ -18,7 +18,7 @@ import { mapGetters } from 'vuex';
 // @ts-ignore
 import FormLabel from '@/components/FormLabel/FormLabel.vue';
 import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
-import { TransactionFees } from 'symbol-sdk';
+import { TransactionFees } from 'symbol-sdk-twix';
 
 @Component({
     components: {

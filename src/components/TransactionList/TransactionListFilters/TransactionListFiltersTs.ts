@@ -25,7 +25,7 @@ import TransactionStatusFilter from '@/components/TransactionList/TransactionLis
 import ButtonRefresh from '@/components/ButtonRefresh/ButtonRefresh.vue';
 import { Signer } from '@/store/Account';
 import { AccountModel } from '@/core/database/entities/AccountModel';
-import { Address } from 'symbol-sdk';
+import { Address } from 'symbol-sdk-twix';
 
 @Component({
     components: { SignerFilter, TransactionStatusFilter, ButtonRefresh },

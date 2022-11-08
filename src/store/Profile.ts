@@ -17,7 +17,7 @@ import { AccountModel } from '@/core/database/entities/AccountModel';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { ProfileService } from '@/services/ProfileService';
 import { SettingService } from '@/services/SettingService';
-import { IListener } from 'symbol-sdk';
+import { IListener } from 'symbol-sdk-twix';
 import Vue from 'vue';
 // internal dependencies
 import { $eventBus } from '../events';

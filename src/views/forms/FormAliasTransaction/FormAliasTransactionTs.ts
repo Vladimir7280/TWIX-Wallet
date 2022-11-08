@@ -23,7 +23,7 @@ import {
     MosaicId,
     NamespaceId,
     UInt64,
-} from 'symbol-sdk';
+} from 'symbol-sdk-twix';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies

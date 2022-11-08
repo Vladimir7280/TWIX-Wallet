@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { Address, MultisigAccountModificationTransaction } from 'symbol-sdk';
+import { Address, MultisigAccountModificationTransaction } from 'symbol-sdk-twix';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';

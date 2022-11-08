@@ -16,7 +16,7 @@
 import { TransactionFilterOptionsState, TransactionState } from '@/store/Transaction';
 import { TransactionFilterService } from '@/services/TransactionFilterService';
 import { getTestAccount } from '@MOCKS/Accounts';
-import { TransferTransaction } from 'symbol-sdk';
+import { TransferTransaction } from 'symbol-sdk-twix';
 
 const currentSigner = getTestAccount('remoteTestnet');
 const recepient = getTestAccount('remoteMijin');

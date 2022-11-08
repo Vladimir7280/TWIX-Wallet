@@ -7,7 +7,7 @@ import { NotificationType } from '@/core/utils/NotificationType';
 import flushPromises from 'flush-promises';
 //@ts-ignore
 import FormNodeEdit from '@/views/forms/FormNodeEdit/FormNodeEdit.vue';
-import { NetworkType } from 'symbol-sdk';
+import { NetworkType } from 'symbol-sdk-twix';
 import { StandardValidationRules } from '@/core/validation/StandardValidationRules';
 import { extend } from 'vee-validate';
 import { UrlValidator } from '@/core/validation/validators';

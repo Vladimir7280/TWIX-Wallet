@@ -15,7 +15,7 @@
  */
 import { mapGetters } from 'vuex';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { AggregateTransaction, Convert, MosaicId, Transaction } from 'symbol-sdk';
+import { AggregateTransaction, Convert, MosaicId, Transaction } from 'symbol-sdk-twix';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // child components

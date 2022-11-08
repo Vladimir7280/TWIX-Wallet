@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { Convert, Crypto, SHA3Hasher } from 'symbol-sdk';
+import { Convert, Crypto, SHA3Hasher } from 'symbol-sdk-twix';
 
 // internal dependencies
 import { IStorageBackend } from '@/core/database/backends/IStorageBackend';

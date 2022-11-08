@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { MosaicId, MultisigAccountInfo } from 'symbol-sdk';
+import { MosaicId, MultisigAccountInfo } from 'symbol-sdk-twix';
 import { NotificationType } from '@/core/utils/NotificationType';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 

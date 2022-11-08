@@ -17,7 +17,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { QRCodeGenerator, TransactionQR } from 'symbol-qr-library';
-import { Address, NetworkType, TransferTransaction } from 'symbol-sdk';
+import { Address, NetworkType, TransferTransaction } from 'symbol-sdk-twix';
 import { MosaicAttachment } from '@/views/forms/FormTransferTransaction/FormTransferTransactionTs.ts';
 // child components
 // @ts-ignore

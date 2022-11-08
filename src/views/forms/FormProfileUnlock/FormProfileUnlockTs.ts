@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Account, NetworkType, Password, Crypto, Address } from 'symbol-sdk';
+import { Account, NetworkType, Password, Crypto, Address } from 'symbol-sdk-twix';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies
