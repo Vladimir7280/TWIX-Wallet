@@ -24,7 +24,7 @@ const transfer = TransferTransaction.create(
     new NamespaceId('alias'),
     [],
     PlainMessage.create('test-message'),
-    NetworkType.MIJIN_TEST,
+    NetworkType.TESTNET,
 );
 const networkConfig = new NetworkConfigurationModel();
 Object.assign(networkConfig, { epochAdjustment: 1573430400 });

@@ -222,7 +222,7 @@
   "display_mnemonic_qr_code": "Display mnemonic QR code",
   "divisibility": "Divisibility",
   "divisibility_can_not_less_than_0": "Divisibility cannot be less than 0",
-  "divisibility_can_not_more_than_6": "Divisibility cannot exceed 4.",
+  "divisibility_can_not_more_than_4": "Divisibility cannot exceed 4.",
   "divisibility_invalid": "This divisibility is invalid [0-4]",
   "do_not_disclose": "Please, keep this information private. Sharing your mnemonic passphrase with others may put your funds at risk.",
   "do_not_disclose_title": "Keep this private!",
