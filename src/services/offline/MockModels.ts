@@ -20,7 +20,7 @@ import {
     TransactionFees,
     UInt64,
 } from 'twix-sdk';
-import { NodeIdentityEqualityStrategy } from 'symbol-openapi-typescript-fetch-client';
+import { NodeIdentityEqualityStrategy } from 'twix-openapi-typescript-fetch-client';
 import { Address } from 'twix-sdk';
 import { AccountType } from 'twix-sdk';
 import { SupplementalPublicKeys } from 'twix-sdk';
