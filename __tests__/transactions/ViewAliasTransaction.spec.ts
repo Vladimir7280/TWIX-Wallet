@@ -30,7 +30,7 @@ describe('transactions/ViewAliasTransaction', () => {
                 AliasAction.Link,
                 namespaceId,
                 mosaicId,
-                NetworkType.TESTNET,
+                NetworkType.TEST_NET,
             );
             const networkConfig = new NetworkConfigurationModel();
             Object.assign(networkConfig, { epochAdjustment: 1573430400 });

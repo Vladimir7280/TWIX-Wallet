@@ -31,7 +31,7 @@ describe('transactions/ViewTransferTransaction', () => {
                 alias,
                 [],
                 PlainMessage.create('test-message'),
-                NetworkType.TESTNET,
+                NetworkType.TEST_NET,
             );
 
             store.getters['account/currentSignerAddress'] = Account.generateNewAccount(NetworkType.MAIN_NET).address;

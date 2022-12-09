@@ -145,7 +145,7 @@ export class CustomValidationRules {
         extend('privateKey', {
             validate(value) {
                 try {
-                    Account.createFromPrivateKey(value, NetworkType.TESTNET);
+                    Account.createFromPrivateKey(value, NetworkType.TEST_NET);
                     return true;
                 } catch (e) {
                     return false;
