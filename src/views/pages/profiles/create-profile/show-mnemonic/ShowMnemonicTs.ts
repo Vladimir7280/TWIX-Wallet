@@ -26,7 +26,7 @@ import { NotificationType } from '@/core/utils/NotificationType';
 import { MnemonicQR, QRCodeGenerator } from 'symbol-qr-library';
 // @ts-ignore
 import failureIcon from '@/views/resources/img/monitor/failure.png';
-import { Password } from 'symbol-sdk-twix';
+import { Password } from 'twix-sdk';
 import { IHDAccountInfo, TWIXPaperWallet } from 'twix-paper-wallets';
 import { UIHelpers } from '@/core/utils/UIHelpers';
 import { AccountService } from '@/services/AccountService';

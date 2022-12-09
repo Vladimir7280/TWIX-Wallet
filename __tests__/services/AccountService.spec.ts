@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NetworkType, Account, Password, Crypto } from 'symbol-sdk-twix';
+import { NetworkType, Account, Password, Crypto } from 'twix-sdk';
 import { AccountService } from '@/services/AccountService';
 import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 import { account1Params, WalletsModel1 } from '@MOCKS/Accounts';

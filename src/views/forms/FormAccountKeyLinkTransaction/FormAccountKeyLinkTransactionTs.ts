@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { UInt64, LinkAction, AccountKeyLinkTransaction } from 'symbol-sdk-twix';
+import { UInt64, LinkAction, AccountKeyLinkTransaction } from 'twix-sdk';
 import { Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 

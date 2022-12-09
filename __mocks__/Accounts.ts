@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { SimpleWallet, Account, NetworkType, Password } from 'symbol-sdk-twix';
+import { SimpleWallet, Account, NetworkType, Password } from 'twix-sdk';
 
 // internal dependencies
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';

@@ -14,7 +14,7 @@
  *
  */
 import TemporaryStore from '@/store/Temporary';
-import { Password } from 'symbol-sdk-twix';
+import { Password } from 'twix-sdk';
 
 describe('store/Profile', () => {
     describe('action "RESET_STATE" should', () => {

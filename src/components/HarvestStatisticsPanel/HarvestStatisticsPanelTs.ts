@@ -16,7 +16,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 
-import { AccountInfo } from 'symbol-sdk-twix';
+import { AccountInfo } from 'twix-sdk';
 import { HarvestedBlockStats, HarvestingStatus } from '@/store/Harvesting';
 import { NetworkCurrencyModel } from '@/core/database/entities/NetworkCurrencyModel';
 import { HarvestingService } from '@/services/HarvestingService';

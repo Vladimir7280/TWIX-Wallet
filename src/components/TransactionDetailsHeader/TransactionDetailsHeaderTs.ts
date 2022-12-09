@@ -17,7 +17,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 // @ts-ignore
 import TransactionDetailRow from '@/components/TransactionDetails/TransactionDetailRow/TransactionDetailRow.vue';
 import { TransactionView } from '@/core/transactions/TransactionView';
-import { Transaction } from 'symbol-sdk-twix';
+import { Transaction } from 'twix-sdk';
 
 @Component({
     components: {

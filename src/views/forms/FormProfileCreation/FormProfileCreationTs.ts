@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NetworkType, Password } from 'symbol-sdk-twix';
+import { NetworkType, Password } from 'twix-sdk';
 // internal dependencies
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
 import { ProfileService } from '@/services/ProfileService';

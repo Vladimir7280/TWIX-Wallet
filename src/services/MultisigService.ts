@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, MultisigAccountGraphInfo, MultisigAccountInfo, NetworkType } from 'symbol-sdk-twix';
+import { Address, MultisigAccountGraphInfo, MultisigAccountInfo, NetworkType } from 'twix-sdk';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
 import { Signer } from '@/store/Account';

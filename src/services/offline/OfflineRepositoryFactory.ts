@@ -28,7 +28,7 @@ import {
     TransactionRepository,
     TransactionStatusHttp,
     TransactionStatusRepository,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { Observable, of } from 'rxjs';
 import { OfflineGenerationHash, OfflineNetworkCurrencies, OfflineUrl } from '@/services/offline/MockModels';
 import { OfflineNetworkRepository } from '@/services/offline/OfflineNetworkRepository';

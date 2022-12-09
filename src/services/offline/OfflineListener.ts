@@ -9,7 +9,7 @@ import {
     NewBlock,
     Transaction,
     TransactionStatusError,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { Observable } from 'rxjs';
 
 export class OfflineListener implements IListener {

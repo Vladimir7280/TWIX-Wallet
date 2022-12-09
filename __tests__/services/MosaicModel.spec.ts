@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, MosaicFlags, MosaicId, MosaicInfo, NetworkType, PublicAccount, UInt64 } from 'symbol-sdk-twix';
+import { Address, MosaicFlags, MosaicId, MosaicInfo, NetworkType, PublicAccount, UInt64 } from 'twix-sdk';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 
 describe('services/MosaicData', () => {

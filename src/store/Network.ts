@@ -40,7 +40,7 @@ import {
     RepositoryFactory,
     RepositoryFactoryHttp,
     TransactionFees,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import Vue from 'vue';
 // internal dependencies
 import { $eventBus } from '../events';

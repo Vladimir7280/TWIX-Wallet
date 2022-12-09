@@ -23,7 +23,7 @@ import { appConfig } from '@/config';
 import { networkConfig } from '@/config';
 import { SettingsModel } from '@/core/database/entities/SettingsModel';
 import { SettingService } from '@/services/SettingService';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 import _ from 'lodash';
 
 const Lock = AwaitLock.create();

@@ -16,7 +16,7 @@
  */
 // external dependencies
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';
-import { AccountMosaicRestrictionTransaction, MosaicId, MosaicRestrictionFlag } from 'symbol-sdk-twix';
+import { AccountMosaicRestrictionTransaction, MosaicId, MosaicRestrictionFlag } from 'twix-sdk';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 

@@ -22,7 +22,7 @@ import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 import MnemonicVerification from '@/components/MnemonicVerification/MnemonicVerification.vue';
 import { NotificationType } from '@/core/utils/NotificationType';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 
 @Component({
     components: {

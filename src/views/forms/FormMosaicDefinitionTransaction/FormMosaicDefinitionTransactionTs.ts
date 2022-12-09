@@ -23,7 +23,7 @@ import {
     MosaicSupplyChangeTransaction,
     Transaction,
     UInt64,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 // internal dependencies
 import { FormTransactionBase } from '@/views/forms/FormTransactionBase/FormTransactionBase';

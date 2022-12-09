@@ -16,7 +16,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Formatters } from '@/core/utils/Formatters';
 import { mapGetters } from 'vuex';
-import { AccountInfo, Address, MosaicId, RepositoryFactory } from 'symbol-sdk-twix';
+import { AccountInfo, Address, MosaicId, RepositoryFactory } from 'twix-sdk';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { AccountService } from '@/services/AccountService';
 // @ts-ignore

@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 import { ObjectStorageBackend } from '@/core/database/backends/ObjectStorageBackend';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { VersionedModel } from '@/core/database/entities/VersionedModel';

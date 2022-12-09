@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Account, Deadline, NamespaceId, NetworkType, PlainMessage, TransferTransaction } from 'symbol-sdk-twix';
+import { Account, Deadline, NamespaceId, NetworkType, PlainMessage, TransferTransaction } from 'twix-sdk';
 import { createStore } from '@MOCKS/Store';
 import { ViewTransferTransaction } from '@/core/transactions/ViewTransferTransaction';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';

@@ -30,7 +30,7 @@ import ModalTransactionDetails from '@/views/modals/ModalTransactionDetails/Moda
 // @ts-ignore
 import TransactionDetails from '@/components/TransactionDetails/TransactionDetails.vue';
 
-import { AggregateTransaction, Convert, CosignatureSignedTransaction, NetworkType, Transaction, TransactionMapping } from 'symbol-sdk-twix';
+import { AggregateTransaction, Convert, CosignatureSignedTransaction, NetworkType, Transaction, TransactionMapping } from 'twix-sdk';
 import { QRCode, CosignatureQR, CosignatureSignedTransactionQR } from 'symbol-qr-library';
 import { OfflineGenerationHash } from '@/services/offline/MockModels';
 import _ from 'lodash';

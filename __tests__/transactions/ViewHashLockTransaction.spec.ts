@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { AggregateTransaction, Deadline, LockFundsTransaction, NetworkCurrencies, NetworkType, UInt64 } from 'symbol-sdk-twix';
+import { AggregateTransaction, Deadline, LockFundsTransaction, NetworkCurrencies, NetworkType, UInt64 } from 'twix-sdk';
 import { createStore } from '@MOCKS/Store';
 import { getTestAccount } from '@MOCKS/Accounts';
 import { ViewHashLockTransaction } from '@/core/transactions/ViewHashLockTransaction';

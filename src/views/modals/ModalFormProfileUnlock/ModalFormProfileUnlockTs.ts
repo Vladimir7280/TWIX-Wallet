@@ -14,7 +14,7 @@
  *
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Account, Password } from 'symbol-sdk-twix';
+import { Account, Password } from 'twix-sdk';
 // internal dependencies
 // child components
 // @ts-ignore

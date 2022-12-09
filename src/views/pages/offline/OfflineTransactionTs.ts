@@ -24,7 +24,7 @@ import QRCodeDisplay from '@/components/QRCode/QRCodeDisplay/QRCodeDisplay.vue';
 // @ts-ignore
 import NavigationTabs from '@/components/NavigationTabs/NavigationTabs.vue';
 
-import { NetworkType, SignedTransaction } from 'symbol-sdk-twix';
+import { NetworkType, SignedTransaction } from 'twix-sdk';
 import { SignedTransactionQR } from 'symbol-qr-library';
 import { TabEntry } from '@/router/TabEntry';
 import { officialIcons } from '@/views/resources/Images';

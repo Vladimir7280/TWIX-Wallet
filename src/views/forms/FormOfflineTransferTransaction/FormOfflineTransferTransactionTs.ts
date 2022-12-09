@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, NetworkType, SignedTransaction } from 'symbol-sdk-twix';
+import { Address, NetworkType, SignedTransaction } from 'twix-sdk';
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies

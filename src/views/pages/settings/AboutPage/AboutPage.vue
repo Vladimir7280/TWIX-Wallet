@@ -37,8 +37,6 @@
                 <div class="value">
                     <span v-if="isNetworkType(types.MAIN_NET)">MAINNET</span>
                     <span v-else-if="isNetworkType(types.TEST_NET)">TESTNET</span>
-                    <span v-else-if="isNetworkType(types.MIJIN)">MIJIN</span>
-                    <span v-else-if="isNetworkType(types.MIJIN_TEST)">MIJIN_TEST</span>
                 </div>
             </div>
 
@@ -61,7 +59,7 @@
                     {{ $t('about_sdk_version') }}
                 </div>
                 <div class="value">
-                    {{ configs.packageLock.dependencies['symbol-sdk-twix'].version }}
+                    {{ configs.packageLock.dependencies['twix-sdk'].version }}
                 </div>
             </div>
 
@@ -98,7 +96,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 // child components
 import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 import FormLabel from '@/components/FormLabel/FormLabel.vue';

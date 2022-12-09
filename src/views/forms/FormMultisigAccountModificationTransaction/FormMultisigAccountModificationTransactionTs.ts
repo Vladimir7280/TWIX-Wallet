@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { MultisigAccountInfo, MultisigAccountModificationTransaction, UInt64, Address } from 'symbol-sdk-twix';
+import { MultisigAccountInfo, MultisigAccountModificationTransaction, UInt64, Address } from 'twix-sdk';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 // internal dependencies
 import { FormTransactionBase } from '@/views/forms/FormTransactionBase/FormTransactionBase';

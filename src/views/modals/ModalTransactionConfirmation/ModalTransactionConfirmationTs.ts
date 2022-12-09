@@ -34,7 +34,7 @@ import {
     Crypto,
     TransactionType,
     LinkAction,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { ValidationObserver } from 'vee-validate';
 import { Signer } from '@/store/Account';

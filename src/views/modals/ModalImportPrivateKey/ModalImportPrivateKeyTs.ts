@@ -24,7 +24,7 @@ import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
 import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 // @ts-ignore
 import { PrivateKeyValidator } from '@/core/validation/validators';
-import { Account } from 'symbol-sdk-twix';
+import { Account } from 'twix-sdk';
 import { mapGetters } from 'vuex';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 @Component({

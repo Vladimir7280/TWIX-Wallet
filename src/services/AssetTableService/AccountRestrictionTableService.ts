@@ -17,7 +17,7 @@
 // @ts-ignore
 import i18n from '@/language';
 import RestrictionFlagMapping from '@/views/forms/FormAccountRestrictionTransaction/RestrictionFlagMapping';
-import { AccountRestriction, Address, MosaicId } from 'symbol-sdk-twix';
+import { AccountRestriction, Address, MosaicId } from 'twix-sdk';
 import { AssetTableService, TableField } from './AssetTableService';
 
 export class AccountRestrictionTableService extends AssetTableService {

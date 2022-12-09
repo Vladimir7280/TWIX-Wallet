@@ -33,7 +33,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 // child components
 import MaxFeeSelector from '@/components/MaxFeeSelector/MaxFeeSelector.vue';
 import FormRow from '@/components/FormRow/FormRow.vue';
-import { TransactionFees } from 'symbol-sdk-twix';
+import { TransactionFees } from 'twix-sdk';
 import { mapGetters } from 'vuex';
 @Component({
     components: { MaxFeeSelector, FormRow },

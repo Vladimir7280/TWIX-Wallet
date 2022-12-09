@@ -1,4 +1,4 @@
-import { NetworkConfiguration, NetworkName, NetworkRepository, NetworkType, RentalFees, TransactionFees } from 'symbol-sdk-twix';
+import { NetworkConfiguration, NetworkName, NetworkRepository, NetworkType, RentalFees, TransactionFees } from 'twix-sdk';
 import { Observable, of } from 'rxjs';
 import { OfflineNetworkProperties, OfflineRentalFees, OfflineTransactionFees } from '@/services/offline/MockModels';
 

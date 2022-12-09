@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Convert, Password, SHA3Hasher } from 'symbol-sdk-twix';
+import { Convert, Password, SHA3Hasher } from 'twix-sdk';
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { ProfileModelStorage } from '@/core/database/storage/ProfileModelStorage';

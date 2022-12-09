@@ -9,7 +9,7 @@ import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 import FormRow from '@/components/FormRow/FormRow.vue';
 import { NodeModel } from '@/core/database/entities/NodeModel';
 import { URLHelpers } from '@/core/utils/URLHelpers';
-import { NetworkType, NodeInfo, RepositoryFactoryHttp, RoleType } from 'symbol-sdk-twix';
+import { NetworkType, NodeInfo, RepositoryFactoryHttp, RoleType } from 'twix-sdk';
 import { NotificationType } from '@/core/utils/NotificationType';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 

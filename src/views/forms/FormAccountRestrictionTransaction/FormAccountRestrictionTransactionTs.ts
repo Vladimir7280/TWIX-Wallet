@@ -53,7 +53,7 @@ import {
     OperationRestrictionFlag,
     Transaction,
     UInt64,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 // child components
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import { Component, Prop } from 'vue-property-decorator';

@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { MosaicId, NetworkType } from 'symbol-sdk-twix';
+import { MosaicId, NetworkType } from 'twix-sdk';
 import { ValidationProvider } from 'vee-validate';
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';

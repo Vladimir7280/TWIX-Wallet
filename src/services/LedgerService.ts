@@ -1,7 +1,7 @@
 import { DerivationPathValidator } from '@/core/validation/validators';
 import { SymbolLedger } from '@/core/utils/Ledger';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
-import { NetworkType } from 'symbol-sdk-twix/dist/src/model/network/NetworkType';
+import { NetworkType } from 'twix-sdk/dist/src/model/network/NetworkType';
 const TransportNodeHid = window['TransportNodeHid'] && window['TransportNodeHid'].default;
 
 export class LedgerService {

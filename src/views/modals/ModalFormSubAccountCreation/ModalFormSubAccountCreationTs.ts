@@ -30,7 +30,7 @@ import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 import { AccountModel, AccountType } from '@/core/database/entities/AccountModel';
 import { NotificationType } from '@/core/utils/NotificationType';
-import { Crypto, NetworkType, Password, PublicAccount } from 'symbol-sdk-twix';
+import { Crypto, NetworkType, Password, PublicAccount } from 'twix-sdk';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { FilterHelpers } from '@/core/utils/FilterHelpers';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';

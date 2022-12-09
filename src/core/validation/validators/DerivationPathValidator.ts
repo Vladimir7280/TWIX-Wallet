@@ -15,7 +15,7 @@
  */
 // internal dependencies
 import { Validator, staticImplements } from './Validator';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 
 @staticImplements<Validator>()
 export class DerivationPathValidator {

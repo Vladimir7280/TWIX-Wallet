@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { AccountInfo, Address, MosaicId, PublicAccount, NetworkType, RepositoryFactory } from 'symbol-sdk-twix';
+import { AccountInfo, Address, MosaicId, PublicAccount, NetworkType, RepositoryFactory } from 'twix-sdk';
 import { Network } from 'symbol-hd-wallets';
 // internal dependencies
 import { DerivationService } from '@/services/DerivationService';

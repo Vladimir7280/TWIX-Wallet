@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 
 const TEST_PROFILES = {

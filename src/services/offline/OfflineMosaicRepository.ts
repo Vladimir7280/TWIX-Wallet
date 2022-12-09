@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MerkleStateInfo, MosaicId, MosaicInfo, MosaicRepository, MosaicSearchCriteria, Page, PaginationStreamer } from 'symbol-sdk-twix';
+import { MerkleStateInfo, MosaicId, MosaicInfo, MosaicRepository, MosaicSearchCriteria, Page, PaginationStreamer } from 'twix-sdk';
 import { Observable, of } from 'rxjs';
 
 export class OfflineMosaicRepository implements MosaicRepository {

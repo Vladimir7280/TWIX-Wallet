@@ -18,7 +18,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies
 import { FormNamespaceRegistrationTransactionTs } from '../FormNamespaceRegistrationTransaction/FormNamespaceRegistrationTransactionTs';
-import { NamespaceId } from 'symbol-sdk-twix';
+import { NamespaceId } from 'twix-sdk';
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
 // configuration
 // child components

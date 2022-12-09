@@ -34,7 +34,7 @@ import {
     AccountAddressRestrictionTransaction,
     AccountMosaicRestrictionTransaction,
     AccountOperationRestrictionTransaction,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { ViewUnknownTransaction } from '@/core/transactions/ViewUnknownTransaction';
 import { ViewHashLockTransaction } from '@/core/transactions/ViewHashLockTransaction';
 import { ViewMultisigAccountModificationTransaction } from '@/core/transactions/ViewMultisigAccountModificationTransaction';

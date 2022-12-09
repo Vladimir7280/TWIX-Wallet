@@ -27,7 +27,7 @@ import {
     Transaction,
     TransactionFees,
     UInt64,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { Signer } from '@/store/Account';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 import { Observable, of } from 'rxjs';

@@ -14,7 +14,7 @@
  *
  */
 import { ProfileService } from '@/services/ProfileService';
-import { Password } from 'symbol-sdk-twix';
+import { Password } from 'twix-sdk';
 
 // prepare all
 

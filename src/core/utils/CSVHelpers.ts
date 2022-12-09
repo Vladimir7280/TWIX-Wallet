@@ -18,7 +18,7 @@ import FileSaver from 'file-saver';
 import store from '@/store/index.ts';
 import { TransactionViewFactory } from '@/core/transactions/TransactionViewFactory';
 import { TransactionView } from '@/core/transactions/TransactionView';
-import { AggregateTransaction, Transaction, TransactionType } from 'symbol-sdk-twix';
+import { AggregateTransaction, Transaction, TransactionType } from 'twix-sdk';
 import * as _ from 'lodash';
 
 export class CSVHelpers {

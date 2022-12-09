@@ -15,7 +15,7 @@
  */
 
 import { NamespaceModel } from '@/core/database/entities/NamespaceModel';
-import { Address, NamespaceName, RepositoryFactory } from 'symbol-sdk-twix';
+import { Address, NamespaceName, RepositoryFactory } from 'twix-sdk';
 import { Observable, of } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import * as _ from 'lodash';

@@ -15,7 +15,7 @@
  */
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { CosignatureSignedTransactionQR } from 'symbol-qr-library';
-import { NetworkType, CosignatureSignedTransaction, PublicAccount } from 'symbol-sdk-twix';
+import { NetworkType, CosignatureSignedTransaction, PublicAccount } from 'twix-sdk';
 
 import { QRCodeDetailItem } from '@/components/QRCode/QRCodeActions/TemplateQRAction/TemplateQRActionTs';
 // @ts-ignore

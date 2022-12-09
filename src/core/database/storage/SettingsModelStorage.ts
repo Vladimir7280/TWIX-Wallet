@@ -17,7 +17,7 @@
 import { VersionedObjectStorage } from '@/core/database/backends/VersionedObjectStorage';
 import { SettingsModel } from '@/core/database/entities/SettingsModel';
 import { networkConfig } from '@/config';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 
 export class SettingsModelStorage extends VersionedObjectStorage<Record<string, SettingsModel>> {
     /**

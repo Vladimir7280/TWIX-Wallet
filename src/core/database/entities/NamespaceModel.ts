@@ -14,7 +14,7 @@
  *
  */
 
-import { NamespaceInfo } from 'symbol-sdk-twix';
+import { NamespaceInfo } from 'twix-sdk';
 import { MetadataModel } from './MetadataModel';
 
 /**

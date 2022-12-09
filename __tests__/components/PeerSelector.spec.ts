@@ -5,7 +5,7 @@ import Vuex from 'vuex';
 import i18n from '@/language';
 import VueI18n from 'vue-i18n';
 import { NetworkService } from '@/services/NetworkService';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 // configuration
 let wrapper;
 let vm;

@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { NamespaceId, NamespaceRegistrationTransaction, NamespaceRegistrationType, Transaction, UInt64 } from 'symbol-sdk-twix';
+import { NamespaceId, NamespaceRegistrationTransaction, NamespaceRegistrationType, Transaction, UInt64 } from 'twix-sdk';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies

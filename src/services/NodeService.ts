@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType, NodeInfo, RepositoryFactory } from 'symbol-sdk-twix';
+import { NetworkType, NodeInfo, RepositoryFactory } from 'twix-sdk';
 import { Observable } from 'rxjs';
 import { ObservableHelpers } from '@/core/utils/ObservableHelpers';
 import { map, tap } from 'rxjs/operators';

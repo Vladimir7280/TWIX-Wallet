@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, AddressAliasTransaction, AliasAction, MosaicAliasTransaction, MosaicId, NamespaceId } from 'symbol-sdk-twix';
+import { Address, AddressAliasTransaction, AliasAction, MosaicAliasTransaction, MosaicId, NamespaceId } from 'twix-sdk';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 import { TransactionDetailItem } from '@/core/transactions/TransactionDetailItem';

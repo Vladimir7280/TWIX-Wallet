@@ -1,6 +1,6 @@
 // external dependencies
 import { Component, Vue } from 'vue-property-decorator';
-import { Password, Account, RepositoryFactory, Crypto } from 'symbol-sdk-twix';
+import { Password, Account, RepositoryFactory, Crypto } from 'twix-sdk';
 import { mapGetters } from 'vuex';
 
 // internal dependencies

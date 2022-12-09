@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 // external dependencies
-import { MosaicMetadataTransaction } from 'symbol-sdk-twix';
+import { MosaicMetadataTransaction } from 'twix-sdk';
 
 // internal dependencies
 import { TransactionView } from './TransactionView';

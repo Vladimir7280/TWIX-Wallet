@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { NamespaceRegistrationType, NetworkType } from 'symbol-sdk-twix';
+import { NamespaceRegistrationType, NetworkType } from 'twix-sdk';
 // internal dependencies
 import { ValidationRuleset } from '@/core/validation/ValidationRuleset';
 // child components

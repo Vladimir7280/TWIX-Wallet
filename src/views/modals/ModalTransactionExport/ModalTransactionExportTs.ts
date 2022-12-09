@@ -15,7 +15,7 @@
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Transaction } from 'symbol-sdk-twix';
+import { Transaction } from 'twix-sdk';
 
 // child components
 // @ts-ignore

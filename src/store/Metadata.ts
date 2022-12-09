@@ -14,7 +14,7 @@
  *
  */
 
-import { Address, Deadline, MetadataType, Transaction, UInt64 } from 'symbol-sdk-twix';
+import { Address, Deadline, MetadataType, Transaction, UInt64 } from 'twix-sdk';
 import * as _ from 'lodash';
 import Vue from 'vue';
 

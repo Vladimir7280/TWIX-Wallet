@@ -22,7 +22,7 @@ import {
     NamespaceRegistrationTransaction,
     MosaicSupplyChangeAction,
     MosaicSupplyChangeTransaction,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 import { FormTransactionBase } from '@/views/forms/FormTransactionBase/FormTransactionBase';
 // @ts-ignore

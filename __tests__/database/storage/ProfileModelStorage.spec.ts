@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 import { ProfileModelStorage } from '@/core/database/storage/ProfileModelStorage';
 import { ObjectStorageBackend } from '@/core/database/backends/ObjectStorageBackend';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';

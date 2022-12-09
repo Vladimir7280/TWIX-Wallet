@@ -16,7 +16,7 @@
 // internal dependencies
 import { DerivationPathValidator } from '@/core/validation/validators';
 import { AccountService } from '@/services/AccountService';
-import { NetworkType } from 'symbol-sdk-twix/dist/src/model/network/NetworkType';
+import { NetworkType } from 'twix-sdk/dist/src/model/network/NetworkType';
 
 export enum DerivationPathLevels {
     Purpose = 1,

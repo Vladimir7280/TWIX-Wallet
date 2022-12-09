@@ -1,4 +1,4 @@
-import { MosaicId } from 'symbol-sdk-twix';
+import { MosaicId } from 'twix-sdk';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 import { MosaicService } from '@/services/MosaicService';
 import { mosaicConfigurations } from '@MOCKS/MosaicConfigurations';

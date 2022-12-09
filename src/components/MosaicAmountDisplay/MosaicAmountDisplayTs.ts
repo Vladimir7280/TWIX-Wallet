@@ -16,7 +16,7 @@
 // external dependencies
 import { mapGetters } from 'vuex';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MosaicId, NamespaceId } from 'symbol-sdk-twix';
+import { MosaicId, NamespaceId } from 'twix-sdk';
 // internal dependencies
 // configuration
 // child components

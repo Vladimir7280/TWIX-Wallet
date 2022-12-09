@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NamespaceRegistrationTransaction, NamespaceRegistrationType } from 'symbol-sdk-twix';
+import { NamespaceRegistrationTransaction, NamespaceRegistrationType } from 'twix-sdk';
 // internal dependencies
 import { TransactionView } from './TransactionView';
 import { NamespaceModel } from '@/core/database/entities/NamespaceModel';

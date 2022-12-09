@@ -14,7 +14,7 @@
  *
  */
 
-import { MosaicInfo } from 'symbol-sdk-twix';
+import { MosaicInfo } from 'twix-sdk';
 import { MetadataModel } from './MetadataModel';
 
 /**

@@ -15,7 +15,7 @@
  */
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Password, Crypto } from 'symbol-sdk-twix';
+import { Password, Crypto } from 'twix-sdk';
 import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 import CryptoJS from 'crypto-js';
 // internal dependencies

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { RepositoryFactory, StorageInfo } from 'symbol-sdk-twix';
+import { RepositoryFactory, StorageInfo } from 'twix-sdk';
 import Vue from 'vue';
 // internal dependencies
 

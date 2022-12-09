@@ -42,7 +42,7 @@ import ModalFormWrap from '@/views/modals/ModalFormWrap/ModalFormWrap.vue';
 import ModalMetadataDisplay from '@/views/modals/ModalMetadataDisplay/ModalMetadataDisplay.vue';
 // @ts-ignore
 import ModalMetadataUpdate from '@/views/modals/ModalMetadataUpdate/ModalMetadataUpdate.vue';
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 

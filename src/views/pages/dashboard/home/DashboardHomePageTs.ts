@@ -20,7 +20,7 @@ import { AccountModel } from '@/core/database/entities/AccountModel';
 // child components
 // @ts-ignore
 import TransactionList from '@/components/TransactionList/TransactionList.vue';
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 
 @Component({
     components: {

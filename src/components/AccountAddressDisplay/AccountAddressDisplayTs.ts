@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 // internal dependencies
 //@ts-ignore

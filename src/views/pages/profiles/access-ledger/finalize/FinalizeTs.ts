@@ -20,7 +20,7 @@ import { AccountModel, AccountType } from '@/core/database/entities/AccountModel
 import { AccountService } from '@/services/AccountService';
 import { DerivationPathLevels, DerivationService } from '@/services/DerivationService';
 import { Network } from 'symbol-hd-wallets';
-import { Password } from 'symbol-sdk-twix';
+import { Password } from 'twix-sdk';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 

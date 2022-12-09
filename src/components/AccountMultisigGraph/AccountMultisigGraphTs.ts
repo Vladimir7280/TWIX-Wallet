@@ -17,7 +17,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
 import { mapGetters } from 'vuex';
-import { MultisigAccountInfo } from 'symbol-sdk-twix';
+import { MultisigAccountInfo } from 'twix-sdk';
 
 @Component({
     computed: {

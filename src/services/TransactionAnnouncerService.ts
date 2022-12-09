@@ -32,8 +32,8 @@ import {
     TransactionGroup,
     TransactionService,
     TransactionType,
-} from 'symbol-sdk-twix';
-import { TransactionAnnounceResponse } from 'symbol-sdk-twix/dist/src/model/transaction/TransactionAnnounceResponse';
+} from 'twix-sdk';
+import { TransactionAnnounceResponse } from 'twix-sdk/dist/src/model/transaction/TransactionAnnounceResponse';
 import { Store } from 'vuex';
 import { HashLockAggregatePairModelStorage } from '@/core/database/storage/HashLockAggregatePairModelStorage';
 import { HashLockAggregatePairModel } from '@/core/database/entities/HashLockAggregatePairModel';

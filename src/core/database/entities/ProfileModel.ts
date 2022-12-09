@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 
 /**
  * Stored POJO that holds profile information.

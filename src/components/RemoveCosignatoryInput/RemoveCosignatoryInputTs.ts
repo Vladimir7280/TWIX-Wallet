@@ -16,7 +16,7 @@
 // external dependencies
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Address, NetworkType, PublicAccount } from 'symbol-sdk-twix';
+import { Address, NetworkType, PublicAccount } from 'twix-sdk';
 // child components
 // @ts-ignore
 import FormRow from '@/components/FormRow/FormRow.vue';

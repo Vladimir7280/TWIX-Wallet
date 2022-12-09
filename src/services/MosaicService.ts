@@ -15,7 +15,7 @@
  */
 // external dependencies
 import _ from 'lodash';
-import { AccountInfo, Address, Currency, MosaicId, MosaicInfo, MosaicNames, NamespaceId, RepositoryFactory, UInt64 } from 'symbol-sdk-twix';
+import { AccountInfo, Address, Currency, MosaicId, MosaicInfo, MosaicNames, NamespaceId, RepositoryFactory, UInt64 } from 'twix-sdk';
 import { combineLatest, from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap, toArray } from 'rxjs/operators';
 // internal dependencies

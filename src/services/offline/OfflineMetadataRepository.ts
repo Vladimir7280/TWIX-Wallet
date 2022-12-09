@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MerkleStateInfo, Metadata, MetadataRepository, MetadataSearchCriteria, Page, PaginationStreamer } from 'symbol-sdk-twix';
+import { MerkleStateInfo, Metadata, MetadataRepository, MetadataSearchCriteria, Page, PaginationStreamer } from 'twix-sdk';
 import { Observable, of } from 'rxjs';
 
 export class OfflineMetadataRepository implements MetadataRepository {

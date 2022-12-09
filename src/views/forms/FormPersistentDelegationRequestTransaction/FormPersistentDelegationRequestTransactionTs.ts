@@ -32,7 +32,7 @@ import {
     Password,
     Crypto,
     TransactionType,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import Vue from 'vue';

@@ -15,7 +15,7 @@
  */
 import { DerivationPathLevels, DerivationService } from '@/services/DerivationService';
 import { AccountService } from '@/services/AccountService';
-import { NetworkType } from 'symbol-sdk-twix';
+import { NetworkType } from 'twix-sdk';
 
 const networkType = NetworkType.MAIN_NET;
 const DEFAULT_ACCOUNT_PATH = AccountService.getAccountPathByNetworkType(networkType);

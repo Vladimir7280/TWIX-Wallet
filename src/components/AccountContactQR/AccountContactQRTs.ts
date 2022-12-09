@@ -15,7 +15,7 @@
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { ContactQR } from 'symbol-qr-library';
-import { PublicAccount } from 'symbol-sdk-twix';
+import { PublicAccount } from 'twix-sdk';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // resources

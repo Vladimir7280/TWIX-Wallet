@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { NetworkType, NodeInfo, NodeRepository, RepositoryFactory, RoleType } from 'symbol-sdk-twix';
+import { NetworkType, NodeInfo, NodeRepository, RepositoryFactory, RoleType } from 'twix-sdk';
 import { NodeService } from '@/services/NodeService';
 import { toArray } from 'rxjs/operators';
 import { of } from 'rxjs';

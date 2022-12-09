@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 
 // internal dependencies
 import { Validator, staticImplements } from './Validator';

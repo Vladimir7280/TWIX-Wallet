@@ -14,7 +14,7 @@
  *
  */
 
-import { Transaction } from 'symbol-sdk-twix';
+import { Transaction } from 'twix-sdk';
 import { TransactionFilterOptionsState, TransactionState } from '@/store/Transaction';
 
 /**

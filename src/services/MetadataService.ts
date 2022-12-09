@@ -28,7 +28,7 @@ import {
     MetadataSearchCriteria,
     Crypto,
     Convert,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { from, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MetadataModel } from '@/core/database/entities/MetadataModel';

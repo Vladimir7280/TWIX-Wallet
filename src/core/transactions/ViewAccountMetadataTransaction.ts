@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 // external dependencies
-import { AccountMetadataTransaction } from 'symbol-sdk-twix';
+import { AccountMetadataTransaction } from 'twix-sdk';
 
 // internal dependencies
 import { TransactionView } from './TransactionView';

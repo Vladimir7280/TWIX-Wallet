@@ -14,7 +14,7 @@
  *
  */
 
-import { DtoMapping } from 'symbol-sdk-twix';
+import { DtoMapping } from 'twix-sdk';
 
 export class TimeHelpers {
     public static addZero = function (number: number): string {

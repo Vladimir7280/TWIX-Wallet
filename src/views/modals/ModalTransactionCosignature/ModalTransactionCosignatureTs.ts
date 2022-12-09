@@ -25,7 +25,7 @@ import {
     NetworkType,
     TransactionStatus,
     TransactionType,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { mapGetters } from 'vuex';
 
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
@@ -43,7 +43,7 @@ import { CosignatureQR } from 'symbol-qr-library';
 import QRCodeDisplay from '@/components/QRCode/QRCodeDisplay/QRCodeDisplay.vue';
 import { AccountService } from '@/services/AccountService';
 import { LedgerService } from '@/services/LedgerService';
-import { AccountMetadataTransaction } from 'symbol-sdk-twix';
+import { AccountMetadataTransaction } from 'twix-sdk';
 
 @Component({
     components: {

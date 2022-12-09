@@ -22,7 +22,7 @@ import FormOfflineTransferTransaction from '@/views/forms/FormOfflineTransferTra
 // @ts-ignore
 import QRCodeDisplay from '@/components/QRCode/QRCodeDisplay/QRCodeDisplay.vue';
 
-import { NetworkType, SignedTransaction } from 'symbol-sdk-twix';
+import { NetworkType, SignedTransaction } from 'twix-sdk';
 import { SignedTransactionQR } from 'symbol-qr-library';
 
 @Component({

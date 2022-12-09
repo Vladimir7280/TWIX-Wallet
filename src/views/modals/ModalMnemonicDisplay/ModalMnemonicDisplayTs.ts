@@ -15,7 +15,7 @@
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import { Account, Password, Crypto } from 'symbol-sdk-twix';
+import { Account, Password, Crypto } from 'twix-sdk';
 import { MnemonicPassPhrase } from 'symbol-hd-wallets';
 // internal dependencies
 import { ProfileModel } from '@/core/database/entities/ProfileModel';

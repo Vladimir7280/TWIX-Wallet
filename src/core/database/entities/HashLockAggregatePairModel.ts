@@ -14,7 +14,7 @@
  *
  */
 
-import { NetworkType, TransactionType } from 'symbol-sdk-twix';
+import { NetworkType, TransactionType } from 'twix-sdk';
 
 /**
  * HashLock Aggregate Pair to hold unspent HashLocks information

@@ -18,7 +18,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // internal dependencies
 import { AccountModel } from '@/core/database/entities/AccountModel';
-import { AccountNames } from 'symbol-sdk-twix';
+import { AccountNames } from 'twix-sdk';
 
 @Component({
     computed: mapGetters({

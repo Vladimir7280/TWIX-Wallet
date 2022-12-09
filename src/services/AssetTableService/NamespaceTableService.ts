@@ -14,7 +14,7 @@
  *
  */
 // external dependencies
-import { AliasType } from 'symbol-sdk-twix';
+import { AliasType } from 'twix-sdk';
 // internal dependencies
 import { AssetTableService, TableField } from './AssetTableService';
 import { NamespaceModel } from '@/core/database/entities/NamespaceModel';

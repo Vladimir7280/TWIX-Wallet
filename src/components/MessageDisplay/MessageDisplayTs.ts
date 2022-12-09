@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, EncryptedMessage, MessageType, Account, UnresolvedAddress, Message } from 'symbol-sdk-twix';
+import { Address, EncryptedMessage, MessageType, Account, UnresolvedAddress, Message } from 'twix-sdk';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 // @ts-ignore
 import FormWrapper from '@/components/FormWrapper/FormWrapper.vue';
 // @ts-ignore
 import ModalFormProfileUnlock from '@/views/modals/ModalFormProfileUnlock/ModalFormProfileUnlock.vue';
-import { PublicAccount } from 'symbol-sdk-twix';
+import { PublicAccount } from 'twix-sdk';
 import { mapGetters } from 'vuex';
-import { PlainMessage } from 'symbol-sdk-twix';
-import { NamespaceId } from 'symbol-sdk-twix';
+import { PlainMessage } from 'twix-sdk';
+import { NamespaceId } from 'twix-sdk';
 import { NotificationType } from '@/core/utils/NotificationType';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 

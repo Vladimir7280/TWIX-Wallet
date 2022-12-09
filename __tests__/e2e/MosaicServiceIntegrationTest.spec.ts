@@ -26,7 +26,7 @@ import {
     Page,
     RepositoryFactory,
     UInt64,
-} from 'symbol-sdk-twix';
+} from 'twix-sdk';
 import { MosaicService } from '@/services/MosaicService';
 import { of } from 'rxjs';
 import { anything, deepEqual, instance, mock, when } from 'ts-mockito';

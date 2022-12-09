@@ -1,4 +1,4 @@
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 //@ts-ignore
 import TransactionListFilters from '@/components/TransactionList/TransactionListFilters/TransactionListFilters.vue';
 import { getComponent } from '@MOCKS/Components';

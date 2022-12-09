@@ -20,7 +20,7 @@ import { AccountModel } from '@/core/database/entities/AccountModel';
 // child components
 // @ts-ignore
 import FormTransferTransaction from '@/views/forms/FormTransferTransaction/FormTransferTransaction.vue';
-import { Address } from 'symbol-sdk-twix';
+import { Address } from 'twix-sdk';
 import { AddressValidator } from '@/core/validation/validators';
 
 @Component({
