@@ -94,6 +94,7 @@ export class MosaicAmountDisplayTs extends Vue {
      */
     protected get divisibility(): number {
         if (this.useNetwork()) {
+            if(this.networkCurrency.divisibility > 4 ) return 4;
             return this.networkCurrency.divisibility;
         }
         // TODO improve how to resolve the mosaic id when the known value is a namespace id.
