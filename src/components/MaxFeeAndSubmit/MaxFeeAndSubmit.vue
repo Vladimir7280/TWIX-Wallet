@@ -11,12 +11,14 @@
                     :average-fee="averageFee"
                     :slowest-fee="slowestFee"
                     :fast-fee="fastFee"
+                    @value="onSelectFee"
                 />
                 <div v-if="!hideSubmit" class="ml-2">
                     <button
                         type="submit"
                         :class="'centered-button button-style submit-button ' + submitButtonClasses"
                         :disabled="disableSubmit"
+                        data-testid="submitButton"
                         @click="$emit('button-clicked')"
                     >
                         {{ $t(submitButtonText) }}
@@ -122,6 +124,9 @@ export default class MaxFeeAndSubmit extends Vue {
     }
     get fastFee() {
         return this.transactionFees.averageFeeMultiplier * this.size;
+    }
+    onSelectFee(val) {
+        this.$emit('selected-fee', val);
     }
 }
 </script>

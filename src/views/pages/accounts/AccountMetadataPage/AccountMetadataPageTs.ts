@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import { mapGetters } from 'vuex';
 import { AccountModel } from '@/core/database/entities/AccountModel';
 // child components
 // @ts-ignore
-import AccountActions from '@/components/AccountActions/AccountActions.vue';
-// @ts-ignore
 import TableDisplay from '@/components/TableDisplay/TableDisplay.vue';
 // @ts-ignore
 import AssetListPageWrap from '@/views/pages/assets/AssetListPageWrap/AssetListPageWrap.vue';
@@ -30,7 +28,6 @@ import ModalMetadataUpdate from '@/views/modals/ModalMetadataUpdate/ModalMetadat
 
 @Component({
     components: {
-        AccountActions,
         AssetListPageWrap,
         TableDisplay,
         ModalMetadataUpdate,

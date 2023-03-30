@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 // child components
 // @ts-ignore
-import DisabledUiOverlay from '@/components/DisabledUiOverlay/DisabledUiOverlay.vue';
-// @ts-ignore
 import SpinnerLoading from '@/components/SpinnerLoading/SpinnerLoading.vue';
 
 @Component({
@@ -29,7 +27,6 @@ import SpinnerLoading from '@/components/SpinnerLoading/SpinnerLoading.vue';
         }),
     },
     components: {
-        DisabledUiOverlay,
         SpinnerLoading,
     },
 })

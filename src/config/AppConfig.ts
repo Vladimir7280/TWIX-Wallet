@@ -14,6 +14,8 @@
  *
  */
 
+import { Formatters } from '@/core/utils/Formatters';
+
 export interface LanguageConfig {
     label: string;
     value: string;
@@ -22,6 +24,7 @@ export interface LanguageConfig {
 export interface AppConfig {
     languages: LanguageConfig[];
     articlesFeedUrl: string;
+    repositoryDataUrl: string;
     constants: {
         EVENTS_THROTTLING_TIME: number;
         MAX_REMOTE_ACCOUNT_CHECKS: number;
@@ -33,7 +36,9 @@ export interface AppConfig {
         DECIMAL_SEPARATOR: string;
     };
     title: string;
+    offlineNodeModelUrl: string;
     marketServerUrl: string;
+    symbolDocsScamAlertUrl: string;
 }
 
 const defaultAppConfig: AppConfig = {
@@ -46,13 +51,22 @@ const defaultAppConfig: AppConfig = {
         MIN_PASSWORD_LENGTH: 8,
         SEED_ACCOUNT_NAME_PREFIX: 'SeedWallet-',
         ANNOUNCE_TRANSACTION_TIMEOUT: 120000,
-        DECIMAL_SEPARATOR: Number('1.1').toLocaleString().substring(1, 2),
+        DECIMAL_SEPARATOR: navigator.languages
+            ? Formatters.getDecimalSeparator(navigator.languages[0])
+            : Number('1.1').toLocaleString().substring(1, 2),
     },
     languages: [
         { value: 'en-US', label: 'English' },
+    //    { value: 'zh-CN', label: '中文' },
+    //    { value: 'ja-JP', label: '日本語' },
+    //    { value: 'ko-KR', label: '한국어' },
+    //    { value: 'ru-RU', label: 'Русский' },
     ],
     marketServerUrl: 'http://app.nemcn.io',
     articlesFeedUrl: 'https://medium.com/feed/new-capital',
+    repositoryDataUrl: 'https://api.github.com/repos/NewCapital/TWIX-Wallet/releases/latest',
+    offlineNodeModelUrl: 'https://localhost:3000',
+    symbolDocsScamAlertUrl: 'https://docs.symbol.dev/guides/account/scams-and-security.html',
 };
 const resolvedAppConfig: AppConfig = window['appConfig'] || defaultAppConfig;
 console.log('appConfig resolved!', resolvedAppConfig);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import { Transaction } from 'twix-sdk';
 import { TransactionFilterOptionsState, TransactionState } from '@/store/Transaction';
+import { IContact } from 'symbol-address-book';
 
 /**
  * TransactionFilter used for filtering transactions by group and sent status.
@@ -24,11 +25,16 @@ export class TransactionFilterService {
     /**
      * Filters transactions depends on selected filter options.
      * @param state for extracting transactions filter options and list filtered by group.
-     * @param currentSignerAddress selected signer address
+     * @param currentSignerAddress selected signer address(es)
      */
-    public static filter(state: TransactionState, currentSignerAddress: string): Transaction[] {
+    public static filter(
+        state: TransactionState,
+        currentSignerAddress: string | string[],
+        blacklistedContacts: IContact[] = [],
+        blacklistFilterActivated: boolean = false,
+    ): Transaction[] {
         const { filterOptions, transactions, confirmedTransactions, unconfirmedTransactions, partialTransactions } = state;
-        if (!filterOptions.isFilterShouldBeApplied) {
+        if (!filterOptions.isFilterShouldBeApplied && !blacklistedContacts) {
             return [...transactions];
         }
 
@@ -49,10 +55,22 @@ export class TransactionFilterService {
                 result = result.concat(confirmedTransactions);
             }
         }
-
+        if (blacklistedContacts && blacklistFilterActivated) {
+            return this.filterByBlackListedContacts(transactions, blacklistedContacts);
+        }
         return this.filterByRecepient(result, filterOptions, currentSignerAddress);
     }
 
+    /**
+     * Filters transactions received from blacklisted contacts
+     * @param transactions transactions list.
+     * @param BlackListedContacts list of blacklisted contacts
+     */
+    private static filterByBlackListedContacts(transactions: Transaction[], blacklistedContacts: IContact[]) {
+        return transactions.filter((transaction) =>
+            blacklistedContacts.some((contact) => contact.address === transaction.signer?.address.plain()),
+        );
+    }
     /**
      * Filters transactions depends on selected sent status filter options.
      * @param transactions
@@ -62,8 +80,9 @@ export class TransactionFilterService {
     private static filterByRecepient(
         transactions: Transaction[],
         filterOptions: TransactionFilterOptionsState,
-        currentSignerAddress: string,
+        currentSignerAddress: string | string[],
     ): Transaction[] {
+        const filteringAddresses = [].concat(currentSignerAddress);
         const recepientFilterOptions = [filterOptions.isSentSelected, filterOptions.isReceivedSelected];
         const areAllShouldBeShown: boolean = recepientFilterOptions.every((option) => !option);
         if (areAllShouldBeShown) {
@@ -81,12 +100,12 @@ export class TransactionFilterService {
             if ((transaction as any).recipientAddress && (transaction as any).recipientAddress.address) {
                 if (filterOptions.isSentSelected) {
                     if ((transaction as any).signer) {
-                        return (transaction as any).signer.address.plain() === currentSignerAddress;
+                        return filteringAddresses.some((address) => (transaction as any).signer.address.plain() === address);
                     }
                 }
 
                 if (filterOptions.isReceivedSelected) {
-                    return (transaction as any).recipientAddress.address === currentSignerAddress;
+                    return filteringAddresses.some((address) => (transaction as any).recipientAddress.address === address);
                 }
             }
         });

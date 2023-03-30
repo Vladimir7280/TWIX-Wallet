@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,10 @@ import { mapGetters } from 'vuex';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 import { networkConfig } from '@/config';
 import { NetworkType } from 'twix-sdk';
+import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
+import { MaxAmountValidator } from '@/core/validation/validators';
+import { appConfig } from '@/config';
+const { DECIMAL_SEPARATOR } = appConfig.constants;
 
 @Component({
     components: {
@@ -36,12 +40,23 @@ import { NetworkType } from 'twix-sdk';
         ...mapGetters({
             mosaics: 'mosaic/mosaics',
             networkType: 'network/networkType',
+            balanceMosaics: 'mosaic/balanceMosaics',
+            networkConfiguration: 'network/networkConfiguration',
+            isCosignatoryMode: 'account/isCosignatoryMode',
         }),
     },
 })
 export class AmountInputTs extends Vue {
     @Prop({ default: '' }) value: string;
     @Prop({ default: '' }) mosaicHex: string;
+    @Prop({ default: false }) isOffline: boolean;
+    @Prop({ default: 0 }) selectedFeeValue: number;
+    @Prop({ default: false }) isAggregate: boolean;
+    /**
+     * Currently active account's balances
+     * @var {Mosaic[]}
+     */
+    public balanceMosaics: MosaicModel[];
 
     /**
      * Available mosaics models
@@ -56,6 +71,11 @@ export class AmountInputTs extends Vue {
 
     public networkType: NetworkType;
 
+    private networkConfiguration: NetworkConfigurationModel;
+    private validAmount: boolean = true;
+    private isCosignatoryMode: boolean;
+    private isNumber: boolean = true;
+
     created() {
         // update validation rule to reflect correct mosaic divisibility
         const chosenMosaic = this.mosaics.find((mosaic) => this.mosaicHex === mosaic.mosaicIdHex);
@@ -68,11 +88,35 @@ export class AmountInputTs extends Vue {
 
     /// region computed properties getter/setter
     public get relativeValue(): string {
+        this.isNumber = !isNaN(parseInt(this.value));
+        this.validAmount = MaxAmountValidator.validate(this.value.replace(/\s/g, '').replace(DECIMAL_SEPARATOR, '.'), [this.totalAvailableAmount, this.isOffline]);
         return this.value;
     }
 
     public set relativeValue(amount: string) {
+        console.log('amount', amount);
         this.$emit('input', amount);
     }
     /// end-region computed properties getter/setter
+
+    // get the total available amount for the selected mosaic on the account
+    public get totalAvailableAmount() {
+        const selectedMosaic = this.balanceMosaics.find((m) => m.mosaicIdHex === this.mosaicHex);
+        const currentMosaicBalance = selectedMosaic.balance / Math.pow(10, selectedMosaic.divisibility);
+        const balance =
+            this.isCosignatoryMode || selectedMosaic.mosaicIdHex !== this.networkConfiguration.currencyMosaicId
+                ? currentMosaicBalance
+                : (selectedMosaic.balance - this.selectedFeeValue) / Math.pow(10, selectedMosaic.divisibility);
+        if (balance <= 0) {
+            return 0;
+        }
+        console.log('balance', balance);
+        return balance;
+    }
+    // use maximum balance as amount input
+    private useMaximumBalance() {
+        const roundedValue = this.totalAvailableAmount.toString().replace('.', DECIMAL_SEPARATOR);
+        this.relativeValue = roundedValue;
+        this.$emit('input', roundedValue);
+    }
 }

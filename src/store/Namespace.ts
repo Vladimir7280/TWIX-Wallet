@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ export default {
             });
 
             // if it's a refresh request then refresh the list, else concat the new items to the list
-            state.ownedNamespaces = refresh ? uniqueNamespaces : state.ownedNamespaces.concat(uniqueNamespaces);
+            state.ownedNamespaces = refresh ? uniqueNamespaces : _.uniqBy(state.ownedNamespaces.concat(uniqueNamespaces), 'namespaceIdHex');
             state.currentConfirmedPage = pageInfo;
         },
         isFetchingNamespaces: (state: NamespaceState, isFetchingNamespaces: boolean) =>
@@ -103,7 +103,7 @@ export default {
             await Lock.uninitialize(callback, { getters });
         },
 
-        LOAD_NAMESPACES(
+        async LOAD_NAMESPACES(
             { commit, rootGetters },
             { pageNumber, pageSize }: { pageSize: number; pageNumber: number } = {
                 pageSize: 20,
@@ -121,7 +121,7 @@ export default {
                 return;
             }
             commit('isFetchingNamespaces', true);
-            namespaceService
+            return namespaceService
                 .getNamespaces(repositoryFactory, currentSignerAddress, { pageSize, pageNumber })
                 .subscribe(({ models, pageInfo }) => {
                     commit('namespaces', {
@@ -141,23 +141,19 @@ export default {
 
         async GET_LINKED_ADDRESS({ commit, rootGetters }, namespaceId: NamespaceId) {
             const repositoryFactory = rootGetters['network/repositoryFactory'] as RepositoryFactory;
-            const getLinkedAccountPromise = repositoryFactory
+            repositoryFactory
                 .createNamespaceRepository()
                 .getLinkedAddress(namespaceId)
                 .toPromise()
+                .then((linkedAddress) => {
+                    commit('linkedAddress', linkedAddress);
+                    return linkedAddress;
+                })
                 .catch(() => commit('linkedAddress', null));
-            const linkedAddress = await getLinkedAccountPromise;
-
-            commit('linkedAddress', linkedAddress);
         },
 
-        SIGNER_CHANGED({ commit, rootGetters, getters }) {
-            const namespaces: NamespaceModel[] = getters['namespaces'];
-            const currentSignerAddress: Address = rootGetters['account/currentSignerAddress'];
-            if (!currentSignerAddress) {
-                return;
-            }
-            commit('namespaces', { namespaces, currentSignerAddress });
+        SIGNER_CHANGED({ dispatch }) {
+            dispatch('LOAD_NAMESPACES');
         },
 
         async RESOLVE_NAME({ commit, getters, rootGetters }, namespaceId: NamespaceId): Promise<string> {

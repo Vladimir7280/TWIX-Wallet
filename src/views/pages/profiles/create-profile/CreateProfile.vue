@@ -19,7 +19,17 @@
                     </div>
                 </div>
                 <div v-if="getCurrentStep() === 1">
-
+                    <div class="right-hints-section">
+                        <p class="text1">
+                            {{ $t('generate_mnemonic_title') }}
+                        </p>
+                        <p class="text">
+                            {{ $t('move_your_mouse_tip1') }}
+                        </p>
+                        <p class="text_red">
+                            {{ $t('move_your_mouse') }}
+                        </p>
+                    </div>
                 </div>
                 <div v-if="getCurrentStep() === 2">
                     <div class="create-mnemonic-right">
@@ -47,6 +57,7 @@
                 </div>
                 <div v-if="getCurrentStep() === 3">
                     <p class="text1">
+                        {{ $t('tips') }}
                     </p>
                     <p class="text">
                         {{ $t('the_backup_is_wrong') }}

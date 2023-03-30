@@ -44,22 +44,23 @@ export interface NetworkConfigurationDefaults {
 
 export interface NetworkConfig {
     faucetUrl: string;
-    nodes: NodeConfig[];
     defaultNetworkType: number;
     explorerUrl: string;
     networkConfigurationDefaults: NetworkConfigurationDefaults;
+    statisticServiceUrl: string;
 }
 
 export const defaultTestnetNetworkConfig: NetworkConfig = {
-    explorerUrl: 'http://159.69.211.60:8080',
-    faucetUrl: 'http://159.69.211.60:8080',
+    explorerUrl: 'https://e.twix.live',
+    faucetUrl: 'https://f.twix.live',
+    statisticServiceUrl: 'https://s.twix.live',
     defaultNetworkType: 152,
     networkConfigurationDefaults: {
         maxMosaicDivisibility: 4,
         namespaceGracePeriodDuration: 60,
         lockedFundsPerAggregate: '100000',
         maxCosignatoriesPerAccount: 25,
-        blockGenerationTargetTime: 15,
+        blockGenerationTargetTime: 30,
         maxNamespaceDepth: 3,
         maxMosaicDuration: 315360000,
         minNamespaceDuration: 60,
@@ -71,26 +72,23 @@ export const defaultTestnetNetworkConfig: NetworkConfig = {
         currencyMosaicId: '553961D2F0B6A6A7',
         harvestingMosaicId: '553961D2F0B6A6A7',
         defaultDynamicFeeMultiplier: 100,
-        epochAdjustment: 1573430400,
+        epochAdjustment: 1679184000,
         totalChainImportance: 108000000000000,
-        generationHash: 'A4331E1C2E22455E112A066B0647D71CE0F7B15CF89CB131D7B9208EF4E1DA86',
+        generationHash: '28ABD63B6F7E2FDA794C02D8218A881853A86D99B149515F47FE09831614EF90',
     },
-    nodes: [
-        { friendlyName: 'seed0.twix.live', roles: 7, url: 'http://95.217.7.18:3000' },
-        { friendlyName: 'seed1.twix.live', roles: 7, url: 'http://95.217.56.171:3000' },
-    ],
 };
 
 export const defaultMainnetNetworkConfig: NetworkConfig = {
-    explorerUrl: 'http://159.69.211.60:8080',
-    faucetUrl: 'http://159.69.211.60:8080/',
+    explorerUrl: 'https://e.twix.live',
+    faucetUrl: 'https://f.twix.live',
+    statisticServiceUrl: 'https://s.twix.live',
     defaultNetworkType: 104,
     networkConfigurationDefaults: {
         maxMosaicDivisibility: 4,
         namespaceGracePeriodDuration: 60,
         lockedFundsPerAggregate: '100000',
         maxCosignatoriesPerAccount: 25,
-        blockGenerationTargetTime: 15,
+        blockGenerationTargetTime: 30,
         maxNamespaceDepth: 3,
         maxMosaicDuration: 315360000,
         minNamespaceDuration: 60,
@@ -102,14 +100,10 @@ export const defaultMainnetNetworkConfig: NetworkConfig = {
         currencyMosaicId: '553961D2F0B6A6A7',
         harvestingMosaicId: '553961D2F0B6A6A7',
         defaultDynamicFeeMultiplier: 100,
-        epochAdjustment: 1573430400,
+        epochAdjustment: 1679184000,
         totalChainImportance: 108000000000000,
-        generationHash: 'A4331E1C2E22455E112A066B0647D71CE0F7B15CF89CB131D7B9208EF4E1DA86',
+        generationHash: '28ABD63B6F7E2FDA794C02D8218A881853A86D99B149515F47FE09831614EF90',
     },
-    nodes: [
-        { friendlyName: 'seed0.twix.live', roles: 7, url: 'http://95.217.7.18:3000' },
-        { friendlyName: 'seed1.twix.live', roles: 7, url: 'http://95.217.56.171:3000' },
-    ],
 };
 
 

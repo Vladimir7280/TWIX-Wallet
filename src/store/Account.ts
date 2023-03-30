@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,12 @@ import { AccountModel } from '@/core/database/entities/AccountModel';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { AccountService } from '@/services/AccountService';
 import { MultisigService } from '@/services/MultisigService';
+import { NodeService } from '@/services/NodeService';
 import { ProfileService } from '@/services/ProfileService';
 import { RESTService } from '@/services/RESTService';
 import * as _ from 'lodash';
-import { of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import {
-    AccountInfo,
-    AccountNames,
-    Address,
-    IListener,
-    MultisigAccountInfo,
-    NetworkType,
-    PublicAccount,
-    RepositoryFactory,
-} from 'twix-sdk';
+import { Subscription } from 'rxjs';
+import { AccountInfo, AccountNames, Address, IListener, MultisigAccountInfo, PublicAccount, RepositoryFactory } from 'twix-sdk';
 import Vue from 'vue';
 // internal dependencies
 import { $eventBus } from '../events';
@@ -53,18 +44,22 @@ export type Signer = {
     label: string;
     address: Address;
     multisig: boolean;
-    requiredCosignatures: number;
+    requiredCosigApproval: number;
+    requiredCosigRemoval?: number;
+    parentSigners?: Signer[];
 };
 
 // Account state typing
-interface AccountState {
+export interface AccountState {
     initialized: boolean;
     currentAccount: AccountModel;
     currentAccountAddress: Address;
     currentAccountMultisigInfo: MultisigAccountInfo;
     multisigAccountGraph: MultisigAccountInfo[][];
+    multisigAccountGraphInfo: MultisigAccountInfo[];
     isCosignatoryMode: boolean;
     signers: Signer[];
+    currentAccountSigner: Signer;
     currentSigner: Signer;
     currentSignerAddress: Address;
     currentSignerPublicKey: string;
@@ -94,6 +89,7 @@ const accountState: AccountState = {
     currentAccountAliases: [],
     isCosignatoryMode: false,
     signers: [],
+    currentAccountSigner: null,
     currentSigner: null,
     currentSignerAddress: null,
     currentSignerPublicKey: null,
@@ -105,6 +101,7 @@ const accountState: AccountState = {
     subscriptions: {},
     currentRecipient: null,
     multisigAccountGraph: null,
+    multisigAccountGraphInfo: null,
     addressesList: [],
     optInAddressesList: [],
     selectedAddressesToInteract: [],
@@ -125,6 +122,7 @@ export default {
             return state.currentAccount;
         },
         signers: (state: AccountState): Signer[] => state.signers,
+        currentAccountSigner: (state: AccountState): Signer => state.currentAccountSigner,
         currentSigner: (state: AccountState): Signer => state.currentSigner,
         currentAccountAddress: (state: AccountState) => state.currentAccountAddress,
         knownAddresses: (state: AccountState) => state.knownAddresses,
@@ -146,6 +144,7 @@ export default {
         currentRecipient: (state: AccountState) => state.currentRecipient,
         currentAccountAliases: (state: AccountState) => state.currentAccountAliases,
         multisigAccountGraph: (state: AccountState) => state.multisigAccountGraph,
+        multisigAccountGraphInfo: (state: AccountState) => state.multisigAccountGraphInfo,
         addressesList: (state: AccountState) => state.addressesList,
         optInAddressesList: (state: AccountState) => state.optInAddressesList,
         selectedAddressesToInteract: (state: AccountState) => state.selectedAddressesToInteract,
@@ -172,6 +171,9 @@ export default {
         },
         signers: (state: AccountState, signers: Signer[]) => {
             state.signers = signers;
+        },
+        currentAccountSigner: (state: AccountState, currentAccountSigner: Signer) => {
+            state.currentAccountSigner = currentAccountSigner;
         },
         currentSignerAddress: (state: AccountState, signerAddress) => {
             state.currentSignerAddress = signerAddress;
@@ -210,6 +212,9 @@ export default {
 
         multisigAccountGraph: (state: AccountState, multisigAccountGraph) => {
             state.multisigAccountGraph = multisigAccountGraph;
+        },
+        multisigAccountGraphInfo: (state: AccountState, multisigAccountGraphInfo) => {
+            state.multisigAccountGraphInfo = multisigAccountGraphInfo;
         },
         updateSubscriptions: (state: AccountState, payload: { address: string; subscriptions: SubscriptionType }) => {
             const { address, subscriptions } = payload;
@@ -276,21 +281,42 @@ export default {
          *    skipTransactions: boolean,
          * }
          */
-        async initialize({ commit, getters }, { address }) {
+        async initialize({ commit, getters }) {
             const callback = async () => {
-                if (!address || !address.length) {
-                    return;
-                }
                 commit('setInitialized', true);
             };
             await Lock.initialize(callback, { getters });
         },
-        async uninitialize({ commit, dispatch, getters }, { address }) {
+        async uninitialize({ commit, dispatch, getters }) {
             const callback = async () => {
                 // close websocket connections
-                await dispatch('UNSUBSCRIBE', address);
+                await dispatch('UNSUBSCRIBE', getters['currentAccountAddress']);
                 await dispatch('transaction/RESET_TRANSACTIONS', {}, { root: true });
                 commit('setInitialized', false);
+                commit('currentAccount', null);
+                commit('currentAccountAddress', null);
+                commit('currentAccountMultisigInfo', null);
+                commit('currentAccountAliases', null);
+                commit('isCosignatoryMode', false);
+                commit('signers', []);
+                commit('currentAccountSigner', null);
+                commit('currentSigner', null);
+                commit('currentSignerAddress', null);
+                commit('currentSignerPublicKey', null);
+                commit('currentSignerMultisigInfo', null);
+                commit('knownAccounts', []);
+                commit('knownAddresses', []);
+                commit('accountsInfo', []);
+                commit('multisigAccountsInfo', []);
+                commit('subscriptions', {});
+                commit('currentRecipient', null);
+                commit('multisigAccountGraph', null);
+                commit('multisigAccountGraphInfo', null);
+                commit('resetAddressesList', []);
+                commit('resetOptInAddressesList', []);
+                commit('resetSelectedAddressesToInteract', []);
+                commit('resetSelectedAddressesOptInToInteract', []);
+                commit('listener', undefined);
             };
             await Lock.uninitialize(callback, { getters });
         },
@@ -343,6 +369,7 @@ export default {
             if (!address) {
                 throw new Error('Address must be provided when calling account/SET_CURRENT_SIGNER!');
             }
+            const isOffline: boolean = rootGetters['network/isOfflineMode'];
             const currentProfile: ProfileModel = rootGetters['profile/currentProfile'];
             const currentAccount: AccountModel = getters.currentAccount;
             const previousSignerAddress: Address = getters.currentSignerAddress;
@@ -358,8 +385,8 @@ export default {
             });
 
             if (reset) {
-                dispatch('transaction/RESET_TRANSACTIONS', {}, { root: true });
-                dispatch('restriction/RESET_ACCOUNT_RESTRICTIONS', {}, { root: true });
+                await dispatch('transaction/RESET_TRANSACTIONS', {}, { root: true });
+                await dispatch('restriction/RESET_ACCOUNT_RESTRICTIONS', {}, { root: true });
             }
 
             const currentAccountAddress = Address.createFromRawAddress(currentAccount.address);
@@ -370,19 +397,12 @@ export default {
             commit('isCosignatoryMode', !currentSignerAddress.equals(currentAccountAddress));
             commit('knownAccounts', knownAccounts);
 
-            // Upgrade
-            dispatch('namespace/SIGNER_CHANGED', {}, { root: true });
-            dispatch('mosaic/SIGNER_CHANGED', {}, { root: true });
-            dispatch('transaction/SIGNER_CHANGED', {}, { root: true });
-            dispatch('metadata/SIGNER_CHANGED', {}, { root: true });
-            dispatch('harvesting/SET_CURRENT_SIGNER_HARVESTING_MODEL', currentSignerAddress.plain(), { root: true });
-
             // open / close websocket connections
 
             if (reset) {
                 await dispatch('LOAD_ACCOUNT_INFO');
-                dispatch('namespace/LOAD_NAMESPACES', {}, { root: true });
-                dispatch('mosaic/LOAD_MOSAICS', {}, { root: true });
+                await dispatch('namespace/LOAD_NAMESPACES', {}, { root: true });
+                await dispatch('mosaic/LOAD_MOSAICS', {}, { root: true });
             } else {
                 const currentSigner = getters.signers.find((s) => s.address.equals(currentSignerAddress));
                 if (currentSigner) {
@@ -401,24 +421,27 @@ export default {
                 if (!repositoryFactory) {
                     return;
                 }
-                const multisigAccountsInfo: MultisigAccountInfo[] = await repositoryFactory
-                    .createMultisigRepository()
-                    .getMultisigAccountGraphInfo(currentAccountAddress)
-                    .pipe(
-                        map((g) => {
-                            // sorted array to be represented in multisig tree
-                            commit('multisigAccountGraph', g.multisigEntries);
-                            return MultisigService.getMultisigInfoFromMultisigGraphInfo(g);
-                        }),
-                        catchError(() => {
-                            return of([]);
-                        }),
-                    )
-                    .toPromise();
+                const multisigAccountsInfo = await dispatch('LOAD_MULTISIG_GRAPH');
+
                 const currentSignerMultisigInfo = multisigAccountsInfo.find((m) => m.accountAddress.equals(currentSignerAddress));
                 commit('currentSignerMultisigInfo', currentSignerMultisigInfo);
             }
 
+            // Upgrade
+            dispatch('namespace/SIGNER_CHANGED', {}, { root: true });
+            dispatch('mosaic/SIGNER_CHANGED', {}, { root: true });
+            dispatch('transaction/SIGNER_CHANGED', {}, { root: true });
+            dispatch('metadata/SIGNER_CHANGED', {}, { root: true });
+            if (!isOffline) {
+                dispatch('harvesting/SET_CURRENT_SIGNER_HARVESTING_MODEL', currentSignerAddress.plain(), { root: true });
+                const networkType = rootGetters['network/networkType'];
+                const nodeService = new NodeService();
+                const nodes = await nodeService.getNodesFromStatisticService(networkType);
+                if (nodes && nodes.length && navigator.onLine) {
+                    dispatch('harvesting/LOAD_HARVESTED_BLOCKS_STATS', {}, { root: true });
+                }
+                dispatch('network/LOAD_PEER_NODES', {}, { root: true });
+            }
             if (unsubscribeWS) {
                 if (previousSignerAddress) {
                     await dispatch('UNSUBSCRIBE', previousSignerAddress);
@@ -482,7 +505,6 @@ export default {
         },
 
         async LOAD_ACCOUNT_INFO({ commit, getters, rootGetters, dispatch }) {
-            const networkType: NetworkType = rootGetters['network/networkType'];
             const currentAccount: AccountModel = getters.currentAccount;
             const repositoryFactory = rootGetters['network/repositoryFactory'] as RepositoryFactory;
             const currentSignerAddress: Address = getters.currentSignerAddress;
@@ -512,20 +534,8 @@ export default {
             const aliases = await aliasPromise;
             commit('currentAccountAliases', aliases);
 
-            const multisigAccountsInfo: MultisigAccountInfo[] = await repositoryFactory
-                .createMultisigRepository()
-                .getMultisigAccountGraphInfo(currentAccountAddress)
-                .pipe(
-                    map((g) => {
-                        // sorted array to be represented in multisig tree
-                        commit('multisigAccountGraph', g.multisigEntries);
-                        return MultisigService.getMultisigInfoFromMultisigGraphInfo(g);
-                    }),
-                    catchError(() => {
-                        return of([]);
-                    }),
-                )
-                .toPromise();
+            const multisigAccountsInfo = await dispatch('LOAD_MULTISIG_GRAPH');
+
             const currentAccountMultisigInfo = multisigAccountsInfo.find((m) => m.accountAddress.equals(currentAccountAddress));
             const currentSignerMultisigInfo = multisigAccountsInfo.find((m) => m.accountAddress.equals(currentSignerAddress));
             // update multisig flag in currentAccount
@@ -539,11 +549,9 @@ export default {
             }
 
             const signers = new MultisigService().getSigners(
-                networkType,
                 knownAccounts,
-                currentAccount,
-                currentAccountMultisigInfo,
-                multisigAccountsInfo,
+                Address.createFromRawAddress(currentAccount.address),
+                getters.multisigAccountGraph,
             );
 
             const knownAddresses = _.uniqBy(
@@ -556,14 +564,17 @@ export default {
                 'currentSigner',
                 signers.find((s) => s.address.equals(currentSignerAddress)),
             );
+            commit(
+                'currentAccountSigner',
+                signers.find((s) => s.address.equals(currentAccountAddress)),
+            );
             commit('signers', signers);
             commit('multisigAccountsInfo', multisigAccountsInfo);
             commit('currentAccountMultisigInfo', currentAccountMultisigInfo);
             commit('currentSignerMultisigInfo', currentSignerMultisigInfo);
 
             // REMOTE CALL
-            const getAccountsInfoPromise = repositoryFactory.createAccountRepository().getAccountsInfo(knownAddresses).toPromise();
-            const accountsInfo = await getAccountsInfoPromise;
+            const accountsInfo = await repositoryFactory.createAccountRepository().getAccountsInfo(knownAddresses).toPromise();
 
             commit('accountsInfo', accountsInfo);
 
@@ -577,6 +588,55 @@ export default {
                 }
             }
             dispatch('aggregateTransaction/CLEAR_AGGREGATE_TRANSACTIONS_LIST', {}, { root: true });
+        },
+
+        async LOAD_MULTISIG_GRAPH({ commit, getters, rootGetters }): Promise<MultisigAccountInfo[]> {
+            const repositoryFactory = rootGetters['network/repositoryFactory'] as RepositoryFactory;
+            const currentAccountAddress: Address = getters.currentAccountAddress;
+
+            try {
+                const currentMultisigAccountGraphInfo = await repositoryFactory
+                    .createMultisigRepository()
+                    .getMultisigAccountGraphInfo(currentAccountAddress)
+                    .toPromise();
+
+                const rootMultisigAccountGraph = new Map(currentMultisigAccountGraphInfo.multisigEntries);
+
+                for (const [currentLevel, multisigAccountInfos] of currentMultisigAccountGraphInfo.multisigEntries) {
+                    if (currentLevel < 0) {
+                        for (const multisigAccountInfo of multisigAccountInfos) {
+                            const fetchedMultisigAccountGraphInfo = await repositoryFactory
+                                .createMultisigRepository()
+                                .getMultisigAccountGraphInfo(multisigAccountInfo.accountAddress)
+                                .toPromise();
+
+                            fetchedMultisigAccountGraphInfo.multisigEntries.forEach((fetchedMultisigAccountInfos, fetchedLevel) => {
+                                const currentMultisigAccountInfos = rootMultisigAccountGraph.get(currentLevel + fetchedLevel) || [];
+                                const newMultisigAccountInfos = [...currentMultisigAccountInfos, ...fetchedMultisigAccountInfos];
+                                const filteredMultisigAccountInfos = _.uniqBy(newMultisigAccountInfos, (item) =>
+                                    item.accountAddress.plain(),
+                                );
+
+                                rootMultisigAccountGraph.set(currentLevel + fetchedLevel, filteredMultisigAccountInfos);
+                            });
+                        }
+                    }
+                }
+
+                const rootMultisigAccountsInfo = MultisigService.getMultisigInfoFromMultisigGraphInfo({
+                    multisigEntries: rootMultisigAccountGraph,
+                });
+
+                commit('multisigAccountGraph', rootMultisigAccountGraph);
+                commit('multisigAccountGraphInfo', rootMultisigAccountsInfo);
+
+                return rootMultisigAccountsInfo;
+            } catch {
+                commit('multisigAccountGraph', []);
+                commit('multisigAccountGraphInfo', []);
+
+                return [];
+            }
         },
 
         UPDATE_CURRENT_ACCOUNT_NAME({ commit, getters, rootGetters }, name: string) {
@@ -600,22 +660,6 @@ export default {
                     commit('currentSigner', s);
                 }
             });
-        },
-
-        UPDATE_CURRENT_ACCOUNT_REMOTE_ACCOUNT({ commit, getters, rootGetters, dispatch }, encRemoteAccountPrivateKey: string) {
-            const currentAccount: AccountModel = getters.currentAccount;
-            if (!currentAccount) {
-                return;
-            }
-            const currentProfile: ProfileModel = rootGetters['profile/currentProfile'];
-            if (!currentProfile) {
-                return;
-            }
-            const accountService = new AccountService();
-            accountService.updateRemoteAccount(currentAccount, encRemoteAccountPrivateKey);
-            const knownAccounts = accountService.getKnownAccounts(currentProfile.accounts);
-            commit('knownAccounts', knownAccounts);
-            dispatch('LOAD_ACCOUNT_INFO');
         },
 
         DELETE_CURRENT_ACCOUNT({ commit, rootGetters }, account: AccountModel) {

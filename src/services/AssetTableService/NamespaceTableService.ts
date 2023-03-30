@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ export class NamespaceTableService extends AssetTableService {
         currentHeight: number,
         private readonly namespaces: NamespaceModel[],
         private readonly networkConfiguration: NetworkConfigurationModel,
+        private readonly showExpired: boolean,
     ) {
         super(currentHeight);
     }
@@ -46,11 +47,13 @@ export class NamespaceTableService extends AssetTableService {
     }
 
     public getTableRows(): any[] {
-        const namespaces: NamespaceModel[] = this.namespaces;
+        const showExpired: boolean = this.showExpired;
+        const namespaces: NamespaceModel[] = showExpired
+            ? this.namespaces
+            : this.namespaces.filter((ns) => !this.getExpiration(ns).expired);
 
         return namespaces.map((namespaceModel) => {
             const { expired, expiration } = this.getExpiration(namespaceModel);
-
             return {
                 hexId: namespaceModel.namespaceIdHex,
                 name: namespaceModel.name,

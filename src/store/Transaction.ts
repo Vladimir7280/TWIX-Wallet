@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import {
     Page,
     TransactionStatus,
     Order,
+    MultisigAccountInfo,
 } from 'twix-sdk';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -35,7 +36,8 @@ import * as _ from 'lodash';
 // internal dependencies
 import { AwaitLock } from './AwaitLock';
 import { TransactionFilterService } from '@/services/TransactionFilterService';
-
+import { MultisigService } from '@/services/MultisigService';
+import { IContact } from 'symbol-address-book';
 const Lock = AwaitLock.create();
 
 export enum TransactionGroupState {
@@ -139,6 +141,7 @@ export interface TransactionState {
     partialTransactions: Transaction[];
     filterOptions: TransactionFilterOptionsState;
     currentConfirmedPage: PageInfo;
+    isBlackListFilterActivated: boolean;
 }
 
 const transactionState: TransactionState = {
@@ -151,6 +154,7 @@ const transactionState: TransactionState = {
     partialTransactions: [],
     filterOptions: new TransactionFilterOptionsState(),
     currentConfirmedPage: { pageNumber: 1, isLastPage: false },
+    isBlackListFilterActivated: false,
 };
 export default {
     namespaced: true,
@@ -167,6 +171,7 @@ export default {
         confirmedTransactions: (state: TransactionState) => state.confirmedTransactions,
         unconfirmedTransactions: (state: TransactionState) => state.unconfirmedTransactions,
         partialTransactions: (state: TransactionState) => state.partialTransactions,
+        isBlackListFilterActivated: (state: TransactionState) => state.isBlackListFilterActivated,
     },
     mutations: {
         setInitialized: (state: TransactionState, initialized: boolean) => {
@@ -174,6 +179,9 @@ export default {
         },
         isFetchingTransactions: (state: TransactionState, isFetchingTransactions: boolean) => {
             state.isFetchingTransactions = isFetchingTransactions;
+        },
+        isBlackListFilterActivated: (state: TransactionState, isBlackListFilterActivated: boolean) => {
+            state.isBlackListFilterActivated = isBlackListFilterActivated;
         },
         confirmedTransactions: (
             state: TransactionState,
@@ -214,8 +222,16 @@ export default {
             {
                 filterOption,
                 currentSignerAddress,
+                multisigAddresses = [],
                 shouldFilterOptionChange = true,
-            }: { filterOption?: FilterOption; currentSignerAddress: string; shouldFilterOptionChange: boolean },
+                blacklistedContacts = [],
+            }: {
+                filterOption?: FilterOption;
+                currentSignerAddress: string;
+                multisigAddresses: [];
+                shouldFilterOptionChange: boolean;
+                blacklistedContacts?: IContact[];
+            },
         ) => {
             if (shouldFilterOptionChange) {
                 if (filterOption) {
@@ -224,8 +240,19 @@ export default {
                     state.filterOptions = new TransactionFilterOptionsState();
                 }
             }
-
-            state.filteredTransactions = TransactionFilterService.filter(state, currentSignerAddress);
+            if (state.isBlackListFilterActivated) {
+                state.filteredTransactions = TransactionFilterService.filter(
+                    state,
+                    !!multisigAddresses.length ? multisigAddresses : currentSignerAddress,
+                    blacklistedContacts,
+                    state.isBlackListFilterActivated,
+                );
+            } else {
+                state.filteredTransactions = TransactionFilterService.filter(
+                    state,
+                    !!multisigAddresses.length ? multisigAddresses : currentSignerAddress,
+                );
+            }
         },
     },
     actions: {
@@ -285,6 +312,14 @@ export default {
             const subscriptions: Observable<Transaction[]>[] = [];
             commit('isFetchingTransactions', true);
 
+            const multisigAccountGraphInfo: MultisigAccountInfo[][] = rootGetters['account/multisigAccountGraphInfo'];
+            const multisignService = new MultisigService();
+            let multisigChildrenAddresses = [];
+            if (multisigAccountGraphInfo) {
+                multisigChildrenAddresses = multisignService
+                    .getMultisigChildrenAddresses(multisigAccountGraphInfo)
+                    .concat(currentSignerAddress);
+            }
             subscriptions.push(
                 subscribeTransactions(
                     TransactionGroupState.confirmed,
@@ -311,28 +346,54 @@ export default {
                         }),
                     ),
                 );
-
-                subscriptions.push(
-                    subscribeTransactions(
-                        TransactionGroupState.partial,
+                if (!!multisigChildrenAddresses.length) {
+                    const multisigTransactions: Observable<Page<Transaction>>[] = multisigChildrenAddresses.map((address) =>
                         transactionRepository.search({
                             group: TransactionGroup.Partial,
-                            address: currentSignerAddress,
+                            address: address,
                             pageSize: 100,
                             pageNumber: 1, // not paginating
                             order: Order.Desc,
                         }),
-                    ),
-                );
-            }
+                    );
+                    const combinedCallback = combineLatest(multisigTransactions).pipe(
+                        map((txs) =>
+                            txs.reduce((prev, curr) => {
+                                if (prev) {
+                                    const mergedData = [...prev.data];
+                                    // merging 2 arrays without duplicates
+                                    for (const tx of curr.data) {
+                                        if (
+                                            tx.transactionInfo.hash &&
+                                            !prev.data.some((prevTx) => tx.transactionInfo.hash === prevTx.transactionInfo.hash)
+                                        ) {
+                                            mergedData.push(tx);
+                                        }
+                                    }
+                                    return {
+                                        data: mergedData,
+                                        pageSize: mergedData.length,
+                                        pageNumber: prev.pageNumber,
+                                        isLastPage: prev.isLastPage,
+                                    };
+                                }
+                                return curr;
+                            }),
+                        ),
+                    );
 
+                    subscriptions.push(subscribeTransactions(TransactionGroupState.partial, combinedCallback));
+                }
+            }
             combineLatest(subscriptions).subscribe({
                 complete: () => {
                     commit('setAllTransactions');
                     commit('filterTransactions', {
                         filterOption: null,
                         currentSignerAddress: currentSignerAddress.plain(),
+                        multisigAddresses: multisigChildrenAddresses,
                         shouldFilterOptionChange: false,
+                        blacklistedContacts: rootGetters['addressBook/getAddressBook'].getBlackListedContacts(),
                     });
                     commit('isFetchingTransactions', false);
                 },
@@ -395,8 +456,8 @@ export default {
             });
         },
 
-        ADD_TRANSACTION(
-            { commit, getters, rootGetters },
+        async ADD_TRANSACTION(
+            { commit, getters, rootGetters, dispatch },
             { group, transaction }: { group: TransactionGroupState; transaction: Transaction },
         ) {
             if (!group) {
@@ -420,12 +481,14 @@ export default {
                     refresh: true,
                     pageInfo: getters['currentConfirmedPage'],
                 });
-
+                await dispatch('LOAD_TRANSACTIONS');
                 commit('setAllTransactions');
                 commit('filterTransactions', {
                     filterOption: null,
                     currentSignerAddress: currentSignerAddress.plain(),
+                    multisigAddresses: [],
                     shouldFilterOptionChange: false,
+                    blacklistedContacts: rootGetters['addressBook/getAddressBook'].getBlackListedContacts(),
                 });
             }
         },
@@ -458,7 +521,9 @@ export default {
             commit('filterTransactions', {
                 filterOption: null,
                 currentSignerAddress: currentSignerAddress.plain(),
+                multisigAddresses: [],
                 shouldFilterOptionChange: false,
+                blacklistedContacts: rootGetters['addressBook/getAddressBook'].getBlackListedContacts(),
             });
         },
 
@@ -479,9 +544,12 @@ export default {
 
             // add actions to the dispatcher according to the transaction types
             if (
-                [TransactionType.NAMESPACE_REGISTRATION, TransactionType.MOSAIC_ALIAS, TransactionType.ADDRESS_ALIAS].some((a) =>
-                    transactionTypes.some((b) => b === a),
-                )
+                [
+                    TransactionType.NAMESPACE_REGISTRATION,
+                    TransactionType.MOSAIC_ALIAS,
+                    TransactionType.ADDRESS_ALIAS,
+                    TransactionType.NAMESPACE_METADATA,
+                ].some((a) => transactionTypes.some((b) => b === a))
             ) {
                 dispatch('namespace/LOAD_NAMESPACES', {}, { root: true });
             }
@@ -522,12 +590,18 @@ export default {
             // update the partial transaction cosignatures
             transactions[index] = transactions[index].addCosignatures([cosignature]);
 
-            commit('partialTransactions', transactions);
+            commit('partialTransactions', {
+                transactions: transactions,
+                refresh: true,
+                pageInfo: getters['currentConfirmedPage'],
+            });
             commit('setAllTransactions');
             commit('filterTransactions', {
                 filterOption: null,
                 currentSignerAddress: currentSignerAddress.plain(),
+                multisigAddresses: [],
                 shouldFilterOptionChange: false,
+                blacklistedContacts: rootGetters['addressBook/getAddressBook'].getBlackListedContacts(),
             });
         },
     },

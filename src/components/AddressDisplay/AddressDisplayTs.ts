@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,52 @@
  *
  */
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Address, NamespaceId } from 'twix-sdk';
+import { mapGetters } from 'vuex';
+import { Address, NamespaceId, NetworkType } from 'twix-sdk';
+import { networkConfig } from '@/config';
 
-@Component
+@Component({
+    computed: {
+        ...mapGetters({
+            networkType: 'network/networkType',
+        }),
+    },
+})
 export class AddressDisplayTs extends Vue {
     @Prop({
         default: null,
     })
-    address: Address | NamespaceId;
+    address: Address | NamespaceId | string;
+
+    @Prop({
+        default: false,
+    })
+    showAddress: boolean;
+
+    @Prop({
+        default: false,
+    })
+    allowExplorerLink: boolean;
+
+    isAddressBlocked: boolean = false;
 
     /**
      * Action descriptor
      * @var {string}
      */
     public descriptor: string = '';
+
+    /**
+     * Raw address
+     * @var {string}
+     */
+    public rawAddress: string = '';
+
+    /**
+     * Network Type
+     * @var {NetworkType}
+     */
+    public networkType: NetworkType;
 
     /**
      * Hook called when the component is mounted
@@ -48,12 +80,25 @@ export class AddressDisplayTs extends Vue {
             return;
         }
         // in case of normal transfer, display pretty address
-        if (this.address instanceof Address) {
-            const contact = await this.$store.dispatch('addressBook/RESOLVE_ADDRESS', this.address.plain());
-            this.descriptor = contact ? contact.name : this.address.pretty();
-        } else if (this.address instanceof NamespaceId) {
-            this.descriptor = this.address.toHex();
-            this.descriptor = await this.$store.dispatch('namespace/RESOLVE_NAME', this.address);
+        if (this.address instanceof Address || typeof this.address === 'string') {
+            this.rawAddress = this.address instanceof Address ? this.address.plain() : this.address;
+            const contact = await this.$store.dispatch('addressBook/RESOLVE_ADDRESS', this.rawAddress);
+            this.descriptor = contact && contact.name ? contact.name : this.rawAddress;
+            this.isAddressBlocked = contact ? contact.isBlackListed : false;
+        } else {
+            // instanceof this.address is NamespaceId
+            const namespaceName = await this.$store.dispatch('namespace/RESOLVE_NAME', this.address);
+            const linkedAddress = await this.$store.dispatch('namespace/GET_LINKED_ADDRESS', this.address);
+            this.descriptor = linkedAddress && this.showAddress ? `${namespaceName} (${linkedAddress.plain()})` : namespaceName;
+            this.rawAddress = linkedAddress && linkedAddress.plain();
         }
+    }
+
+    public get explorerUrl(): string {
+        if (!this.rawAddress) {
+            return '';
+        }
+
+        return networkConfig[this.networkType].explorerUrl.replace(/\/+$/, '') + '/accounts/' + this.rawAddress;
     }
 }

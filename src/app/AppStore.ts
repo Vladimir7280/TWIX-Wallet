@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import store from '@/store/index.ts';
+import getAppStore from '@/store/index';
+import { Store } from 'vuex/types/index';
 
 /// region app state store initializations
-export const AppStore = store;
+export const AppStore = getAppStore();
+export const AppStoreWrapper = {
+    getStore: (): Store<any> => AppStore,
+};
 /// end-region app state store initializations

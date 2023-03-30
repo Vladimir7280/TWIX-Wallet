@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 //@ts-ignore
 import ModalNetworkNotMatchingProfile from '@/views/modals/ModalNetworkNotMatchingProfile/ModalNetworkNotMatchingProfile.vue';
@@ -28,14 +28,12 @@ import { IContact, AddressBook } from 'symbol-address-book';
     },
 })
 export class ContactSelectorTs extends Vue {
-    @Prop() onContactSelect: (id: string) => {};
-
     public poptipVisible: boolean = false;
     public addressBook: AddressBook;
 
     /// region computed properties getter/setter
     get contactList(): IContact[] {
-        return this.addressBook.getAllContacts();
+        return this.addressBook.getWhiteListedContacts();
     }
 
     /// end-region computed properties getter/setter

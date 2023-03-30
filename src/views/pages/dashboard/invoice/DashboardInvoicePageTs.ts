@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ export class DashboardInvoicePageTs extends Vue {
         // const transfer = this.transactions.shift() as TransferTransaction
         const transfer = this.currentTransaction;
         const recipient = transfer.recipientAddress;
-        return recipient instanceof Address ? recipient.pretty() : recipient.toHex();
+        return recipient instanceof Address ? recipient.plain() : recipient.toHex();
     }
 
     /**

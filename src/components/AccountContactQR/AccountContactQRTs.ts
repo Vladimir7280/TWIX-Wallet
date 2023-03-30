@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,9 @@ export class AccountContactQRTs extends Vue {
         if (!this.account) {
             return null;
         }
+        const publicAccount: PublicAccount = AccountModel.getObjects(this.account).publicAccount;
 
-        try {
-            const publicAccount: PublicAccount = AccountModel.getObjects(this.account).publicAccount;
-            return new ContactQR(this.account.name, publicAccount.publicKey, publicAccount.address.networkType, this.generationHash);
-        } catch (error) {
-            return null;
-        }
+        return new ContactQR(this.account.name, publicAccount.publicKey, publicAccount.address.networkType, this.generationHash);
     }
 
     get downloadName(): string {

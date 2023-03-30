@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ export class AccountAddressDisplayTs extends Vue {
     })
     address: string;
 
-    public get prettyAddress(): string {
-        return this.address ? Address.createFromRawAddress(this.address).pretty() : '';
+    public get plainAddress(): string {
+        return this.address ? Address.createFromRawAddress(this.address).plain() : '';
     }
 
     /// region computed properties getter/setter

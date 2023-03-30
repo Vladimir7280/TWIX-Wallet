@@ -1,9 +1,7 @@
 <template>
     <div class="step-2-wrapper">
         <img src="@/views/resources/img/login/connector-pink.png" />
-        <span class="text"> {{ $t('please_move_mouse_mnemonic') }}</span>
-
-        <Progress stroke-color="#004f99" :percent="percent" />
+        <Progress stroke-color="#ff00ff" :percent="percent" />
     </div>
 </template>
 

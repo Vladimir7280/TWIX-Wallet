@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 import { VersionedObjectStorage } from '@/core/database/backends/VersionedObjectStorage';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { defaultTestnetNetworkConfig } from '@/config';
-import * as _ from 'lodash';
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { VersionedModel } from '@/core/database/entities/VersionedModel';
 
@@ -93,7 +92,7 @@ export class ProfileModelStorage extends VersionedObjectStorage<Record<string, P
                                 modified[name] = {
                                     ...modified[name],
                                     generationHash: defaultTestnetNetworkConfig.networkConfigurationDefaults.generationHash,
-                                    selectedNodeUrlToConnect: _.sample(defaultTestnetNetworkConfig.nodes).url, // Random url.
+                                    selectedNodeUrlToConnect: 'http://localhost:3000',
                                 };
                             }
                         });

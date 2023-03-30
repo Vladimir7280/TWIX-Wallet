@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 // @ts-ignore
 import PageNavigator from '@/components/PageNavigator/PageNavigator.vue';
 // @ts-ignore
-import WindowControls from '@/components/WindowControls/WindowControls.vue';
-// @ts-ignore
 import PeerSelector from '@/components/PeerSelector/PeerSelector.vue';
 // @ts-ignore
 import LanguageSelector from '@/components/LanguageSelector/LanguageSelector.vue';
@@ -43,7 +41,7 @@ import Settings from '@/components/Settings/Settings.vue';
 import LogoutButton from '@/components/LogoutButton/LogoutButton.vue';
 import { URLInfo } from '@/core/utils/URLInfo';
 //@ts-ignore
-import ImportQRButton from '@/components/QRCode/ImportQRButton/ImportQRButton.vue';
+const ImportQRButton = () => import('@/components/QRCode/ImportQRButton/ImportQRButton.vue');
 import { AccountModel } from '@/core/database/entities/AccountModel';
 //@ts-ignore
 import AccountLinks from '@/components/AccountLinks/AccountLinks.vue';
@@ -51,15 +49,15 @@ import { officialIcons } from '@/views/resources/Images';
 import { ConnectingToNodeInfo } from '@/store/Network';
 
 import i18n from '@/language';
-import { HarvestingStatus } from '@/store/Harvesting';
+import { HarvestingStatus, HARVESTING_STATUS_POLLING_TRIAL_LIMIT } from '@/store/Harvesting';
 import { HarvestingModel } from '@/core/database/entities/HarvestingModel';
+import { networkConfig } from '@/config';
 
 @Component({
     components: {
         AppLogo,
         ErrorTooltip,
         PageNavigator,
-        WindowControls,
         PeerSelector,
         LanguageSelector,
         AccountSelectorField,
@@ -78,7 +76,6 @@ import { HarvestingModel } from '@/core/database/entities/HarvestingModel';
             currentProfile: 'profile/currentProfile',
             isCosignatoryMode: 'account/isCosignatoryMode',
             currentAccount: 'account/currentAccount',
-            explorerBaseUrl: 'app/explorerUrl',
             faucetBaseUrl: 'app/faucetUrl',
             connectingToNodeInfo: 'network/connectingToNodeInfo',
             pollingTrials: 'harvesting/pollingTrials',
@@ -145,11 +142,6 @@ export class PageLayoutTs extends Vue {
      */
     public currentAccount: AccountModel;
     /**
-     * Explorer base url
-     * @var {string}
-     */
-    public explorerBaseUrl: string;
-    /**
      * Faucet base url
      * @var {string}
      */
@@ -204,7 +196,8 @@ export class PageLayoutTs extends Vue {
         if (
             this.$route.fullPath === '/delegatedHarvesting' &&
             this.harvestingStatus === HarvestingStatus.FAILED &&
-            (this.pollingTrials === 20 || this.currentSignerHarvestingModel?.delegatedHarvestingRequestFailed)
+            (this.pollingTrials === HARVESTING_STATUS_POLLING_TRIAL_LIMIT ||
+                this.currentSignerHarvestingModel?.delegatedHarvestingRequestFailed)
         ) {
             return {
                 show: true,
@@ -232,9 +225,8 @@ export class PageLayoutTs extends Vue {
     }
 
     public get explorerUrl() {
-        return this.currentAccount
-            ? this.explorerBaseUrl.replace(/\/+$/, '') + '/accounts/' + this.currentAccount.address
-            : this.explorerBaseUrl;
+        const explorerUrl = networkConfig[this.currentProfile.networkType].explorerUrl;
+        return this.currentAccount ? explorerUrl.replace(/\/+$/, '') + '/accounts/' + this.currentAccount.address : explorerUrl;
     }
 
     public get faucetUrl() {
@@ -275,7 +267,7 @@ export class PageLayoutTs extends Vue {
     }
 
     public reconnect() {
-        if (this.$route.fullPath !== '/home') {
+        if (this.$route.fullPath !== '/login') {
             this.$store.dispatch('network/CONNECT', { waitBetweenTrials: true });
         }
     }

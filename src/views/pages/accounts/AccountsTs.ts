@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,9 @@ import ModalConfirm from '@/views/modals/ModalConfirm/ModalConfirm.vue';
         ModalConfirm,
     },
     computed: {
-        ...mapGetters({}),
+        ...mapGetters({
+            isBlackListedSelected: 'addressBook/getBlackListedContactsSelected',
+        }),
     },
 })
 export class AccountsTs extends Vue {
@@ -60,6 +62,8 @@ export class AccountsTs extends Vue {
      * @var {string}
      */
     public parentRouteName: string = 'accounts';
+
+    public isBlackListedSelected: boolean;
 
     public panelItems = ['accounts', 'addressbook'];
 
@@ -83,4 +87,10 @@ export class AccountsTs extends Vue {
      * Show add metadata modal
      */
     public showAccountRestrictionsModal: boolean = false;
+
+    mounted() {
+        if (this.isBlackListedSelected) {
+            this.activeIndex = 1;
+        }
+    }
 }

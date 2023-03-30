@@ -414,6 +414,7 @@ export class FormMultisigAccountModificationTransactionTs extends FormTransactio
             this.networkConfiguration,
             this.transactionFees,
             this.requiredCosignatures,
+            this.clientServerTimeDifference,
         );
     }
 

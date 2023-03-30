@@ -4,7 +4,7 @@
 const webpack = require('webpack');
 
 const packageVersion = JSON.stringify(require('./package.json').version);
-const web = process.env.WEB || false;
+const web = process.env.WEB || true;
 
 console.log(`Building package ${packageVersion} for Web: ${web}`);
 
@@ -69,13 +69,14 @@ module.exports = {
   parallel: require('os').cpus().length > 1,
   // webpack-dev-server
   devServer: {
+    disableHostCheck: true,
     host: '0.0.0.0',
     port: 8080,
     before: app => {
     },
     proxy: {
         '/cryptonews': {
-            target: 'https://cryptonews.com/news/feed', //For testing: this line can be changed to a different RSS source. 
+            target: 'https://medium.com/feed/new-capital', //For testing: this line can be changed to a different RSS source. 
         ws: true,
         changeOrigin: true,
             pathRewrite: { '^/cryptonews': '' }

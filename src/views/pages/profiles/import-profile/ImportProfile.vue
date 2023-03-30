@@ -5,10 +5,16 @@
                 <div v-if="getCurrentStep() === 0">
                     <div class="right-hints-section">
                         <p class="text1">
-                            {{ $t('restore_profile') }}
+                            {{ $t('profile_import') }}
                         </p>
                         <p class="text">
-                            {{ $t('restore_profile_description_tip1') }}
+                            {{ $t('import_private_key_profile_description_tip1') }}
+                        </p>
+                        <p class="text">
+                            {{ $t('import_private_key_profile_description_tip2') }}
+                        </p>
+                        <p class="text_red">
+                            {{ $t('profile_description_tips3') }}
                         </p>
                     </div>
                 </div>
@@ -132,7 +138,7 @@
                 <div v-if="getCurrentStep() === 3">
                     <img src="@/views/resources/img/icons/Incoming.svg" style="width: 30%;" />
                     <p class="text text-big">
-                        {{ $t('restore_successful') }}
+                        {{ $t('creation_successful') }}
                     </p>
                 </div>
             </div>

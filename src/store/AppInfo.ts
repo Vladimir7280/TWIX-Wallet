@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 import Vue from 'vue';
 // internal dependencies
 import i18n from '@/language';
-import app from '@/main';
 import { AwaitLock } from './AwaitLock';
 // configuration
 import { appConfig } from '@/config';
@@ -28,7 +27,6 @@ import _ from 'lodash';
 
 const Lock = AwaitLock.create();
 const settingService = new SettingService();
-const ANON_PROFILE_NAME = '';
 
 interface AppInfoState {
     initialized: false;
@@ -41,6 +39,7 @@ interface AppInfoState {
     controlsDisabledMessage: string;
     faucetUrl: string;
     settings: SettingsModel;
+    symbolDocsScamAlertUrl: string;
 }
 
 const appInfoState: AppInfoState = {
@@ -53,7 +52,8 @@ const appInfoState: AppInfoState = {
     hasControlsDisabled: false,
     controlsDisabledMessage: '',
     faucetUrl: undefined,
-    settings: settingService.getProfileSettings(ANON_PROFILE_NAME, NetworkType.TEST_NET), // TODO how to fix here? why static?
+    settings: undefined,
+    symbolDocsScamAlertUrl: appConfig.symbolDocsScamAlertUrl,
 };
 
 export default {
@@ -61,19 +61,20 @@ export default {
     state: appInfoState,
     getters: {
         getInitialized: (state: AppInfoState) => state.initialized,
+        allowUnknownMultisigTransactions: (state: AppInfoState) => state.settings?.allowUnknownMultisigTransactions,
         currentTimezone: (state: AppInfoState) => state.timezone,
-        language: (state: AppInfoState) => state.settings.language,
+        language: (state: AppInfoState) => state.settings?.language,
         languages: (state: AppInfoState) => state.languages,
         shouldShowLoadingOverlay: (state: AppInfoState) => state.hasLoadingOverlay,
         loadingOverlayMessage: (state: AppInfoState) => state.loadingOverlayMessage,
         loadingDisableCloseButton: (state: AppInfoState) => state.loadingDisableCloseButton,
         shouldDisableControls: (state: AppInfoState) => state.hasControlsDisabled,
         controlsDisabledMessage: (state: AppInfoState) => state.controlsDisabledMessage,
-        explorerUrl: (state: AppInfoState) => state.settings.explorerUrl,
-        settings: (state: AppInfoState) => state.settings,
+        settings: (state: AppInfoState) => state.settings || undefined,
         faucetUrl: (state: AppInfoState) => state.faucetUrl,
-        defaultFee: (state: AppInfoState) => state.settings.defaultFee,
-        defaultAccount: (state: AppInfoState) => state.settings.defaultAccount,
+        defaultFee: (state: AppInfoState) => state.settings?.defaultFee,
+        defaultAccount: (state: AppInfoState) => state.settings?.defaultAccount,
+        symbolDocsScamAlertUrl: (state: AppInfoState) => state.symbolDocsScamAlertUrl,
     },
     mutations: {
         setInitialized: (state: AppInfoState, initialized) => {
@@ -121,7 +122,7 @@ export default {
         SET_LOADING_OVERLAY({ commit }, loadingOverlay) {
             if (!loadingOverlay.show) {
                 // @ts-ignore
-                app.$Spin.hide();
+                this._vm.$Spin.hide();
             }
             commit('toggleLoadingOverlay', loadingOverlay.show);
             commit('setLoadingOverlayMessage', loadingOverlay.message);
@@ -138,13 +139,9 @@ export default {
                 }
             }
             const currentProfile = rootGetters['profile/currentProfile'];
-            const profileName = (currentProfile && currentProfile.profileName) || ANON_PROFILE_NAME;
-            commit('settings', settingService.changeProfileSettings(profileName, settingsModel, currentProfile.networkType));
+            const profileName = (currentProfile && currentProfile.profileName) || '';
+            commit('settings', settingService.changeProfileSettings(profileName, settingsModel));
             commit('faucetUrl', networkConfig[currentProfile.networkType].faucetUrl);
-        },
-
-        SET_EXPLORER_URL({ dispatch }, explorerUrl: string) {
-            dispatch('SET_SETTINGS', { explorerUrl });
         },
 
         SET_LANGUAGE({ dispatch }, language: string) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -212,6 +212,9 @@ export class FormMetadataCreationTs extends FormTransactionBase {
     protected getTransactionCommandMode(): TransactionCommandMode {
         const target = this.getTargetAddress().plain();
         if (this.selectedSigner.multisig) {
+            if (this.requiredCosignatures === 1 && this.formItems.signerAddress === target) {
+                return TransactionCommandMode.AGGREGATE;
+            }
             return TransactionCommandMode.MULTISIGN;
         } else if (this.formItems.signerAddress === target) {
             return TransactionCommandMode.AGGREGATE;
@@ -230,7 +233,7 @@ export class FormMetadataCreationTs extends FormTransactionBase {
         if (!this.selectedSigner.multisig && this.formItems.signerAddress !== this.getTargetAddress().plain()) {
             return 1;
         }
-        return this.currentSignerMultisigInfo ? this.currentSignerMultisigInfo.minApproval : this.selectedSigner.requiredCosignatures;
+        return this.selectedSigner.requiredCosigApproval;
     }
 
     /**
@@ -359,13 +362,12 @@ export class FormMetadataCreationTs extends FormTransactionBase {
     }
 
     set chosenValue(newValue: string) {
-        this.chosenKeyValue = newValue;
-        const currentItem = this.metadataList.find((item) => item.metadataId === this.chosenKeyValue);
+        const currentItem = this.metadataList.find((item) => item.scopedMetadataKey === newValue);
         this.updateFormItems(currentItem);
     }
 
     get chosenValue(): string {
-        return this.chosenKeyValue;
+        return this.formItems.scopedKey;
     }
 
     private updateFormItems(selectedItem: MetadataModel) {
@@ -383,5 +385,14 @@ export class FormMetadataCreationTs extends FormTransactionBase {
         if (this.editMode && this.value) {
             this.updateFormItems(this.value);
         }
+    }
+
+    /**
+     * Hook called when a signer is changed.
+     * @param {string} address
+     */
+    public async onMetadataSignerChanged(address: string) {
+        await this.onChangeSigner(address);
+        this.formItems.targetId = '';
     }
 }

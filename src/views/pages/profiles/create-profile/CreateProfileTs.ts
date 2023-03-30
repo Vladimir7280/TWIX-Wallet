@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ export default class CreateProfileTs extends Vue {
      * List of steps
      * @var {string[]}
      */
-    public StepBarTitleList = ['enter_profile_details', 'generate_mnemonic', 'backup_mnemonic_phrase', 'verify_Mnemonic_phrase', 'finish'];
+    public StepBarTitleList = ['create_profile', 'generate_mnemonic', 'backup_mnemonic_phrase', 'verify_Mnemonic_phrase', 'finish'];
 
     /**
      * Hook called when the page is mounted

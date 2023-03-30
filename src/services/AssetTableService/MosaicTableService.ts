@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import { AssetTableService, TableField } from './AssetTableService';
 import { MosaicModel } from '@/core/database/entities/MosaicModel';
 import { MosaicService } from '@/services/MosaicService';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
+import { Formatters } from '@/core/utils/Formatters';
 
 export class MosaicTableService extends AssetTableService {
     constructor(
@@ -43,6 +44,7 @@ export class MosaicTableService extends AssetTableService {
             { name: 'transferable', label: 'table_header_transferable' },
             { name: 'supplyMutable', label: 'table_header_supply_mutable' },
             { name: 'restrictable', label: 'table_header_restrictable' },
+            { name: 'revokable', label: 'table_header_revokable' },
         ];
     }
 
@@ -65,13 +67,14 @@ export class MosaicTableService extends AssetTableService {
                 return {
                     hexId: mosaicInfo.mosaicIdHex,
                     name: mosaicInfo.name || 'N/A',
-                    supply: mosaicInfo.supply.toLocaleString(),
+                    supply: Formatters.formatNumber(mosaicInfo.supply / Math.pow(10, mosaicInfo.divisibility), mosaicInfo.divisibility),
                     balance: (mosaicInfo.balance || 0) / Math.pow(10, mosaicInfo.divisibility),
                     expiration: expiration,
                     divisibility: mosaicInfo.divisibility,
                     transferable: mosaicInfo.transferable,
                     supplyMutable: mosaicInfo.supplyMutable,
                     restrictable: mosaicInfo.restrictable,
+                    revokable: mosaicInfo.revokable,
                     metadataList: mosaicInfo.metadataList || [],
                 };
             })

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,7 +173,7 @@ export default {
                 .toPromise();
         },
 
-        LOAD_MOSAICS({ commit, rootGetters }) {
+        async LOAD_MOSAICS({ commit, rootGetters }) {
             const repositoryFactory: RepositoryFactory = rootGetters['network/repositoryFactory'];
             const networkCurrency: NetworkCurrencyModel = rootGetters['mosaic/networkCurrency'];
             const accountsInfo: AccountInfo[] = rootGetters['account/accountsInfo'] || [];
@@ -185,7 +185,7 @@ export default {
             }
             commit('isFetchingMosaics', true);
 
-            new MosaicService()
+            return new MosaicService()
                 .getMosaics(repositoryFactory, generationHash, networkCurrency, accountsInfo, currentSignerAddress)
                 .subscribe((mosaics) => {
                     if (!currentSignerAddress) {

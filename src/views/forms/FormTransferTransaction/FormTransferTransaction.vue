@@ -13,8 +13,9 @@
                     <SignerSelector
                         v-if="!hideSigner && !isOfflineMode"
                         v-model="formItems.signerAddress"
-                        :signers="signers"
-                        @input="onChangeSigner"
+                        :root-signer="currentAccountSigner"
+                        :is-aggregate="isAggregate"
+                        @input="signerChanged"
                     />
                     <AccountSignerSelector v-if="!hideSigner && isOfflineMode" />
 
@@ -31,6 +32,9 @@
                             :uid="attachedMosaic.uid"
                             :is-show-delete="index > 0 && index === formItems.attachedMosaics.length - 1"
                             :is-first-item="index === 0"
+                            :is-offline="isOfflineMode"
+                            :selected-fee-value="selectedFeeValue"
+                            :is-aggregate="isAggregate"
                             @input-changed="onMosaicInputChange"
                             @input-deleted="onDeleteMosaicInput"
                         />
@@ -40,7 +44,7 @@
                     <div v-if="mosaicInputsManager.hasFreeSlots()" class="form-row align-right action-link" style="margin-top: -0.1rem;">
                         <a
                             v-if="mosaicInputsManager.hasFreeSlots()"
-                            style="color: #3d3d3d; margin-right: 0.1rem; font-size: 0.14rem;"
+                            style="color: #44004e; margin-right: 0.1rem; font-size: 0.14rem;"
                             @click="addMosaicAttachmentInput"
                             >{{ $t('add_mosaic') }}</a
                         >
@@ -57,7 +61,7 @@
                     <FormRow v-if="!selectedSigner.multisig && !isAggregate && !isLedger && !hideEncryption">
                         <template v-slot:inputs>
                             <div class="inputs-container checkboxes">
-                                <Checkbox v-model="formItems.encryptMessage" @input="onEncryptionChange">
+                                <Checkbox v-model="formItems.encryptMessage" data-testid="encryptMessage" @input="onEncryptionChange">
                                     {{ $t('encrypt_message') }}
                                 </Checkbox>
                             </div>
@@ -71,8 +75,9 @@
                         :hide-submit="hideSubmit"
                         :submit-button-text="submitButtonText"
                         :calculated-recommended-fee="calculatedRecommendedFee"
-                        :disable-submit="currentAccount.isMultisig"
+                        :disable-submit="!submitButtonEnabled"
                         :size="transactionSize"
+                        @selected-fee="onSelectFeeValue"
                         @button-clicked="handleSubmit(onSubmit)"
                         @input="onChangeMaxFee"
                     />

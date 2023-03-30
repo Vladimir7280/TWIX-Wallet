@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import { MnemonicQR, QRCodeGenerator } from 'symbol-qr-library';
 // @ts-ignore
 import failureIcon from '@/views/resources/img/monitor/failure.png';
 import { Password } from 'twix-sdk';
-import { IHDAccountInfo, TWIXPaperWallet } from 'twix-paper-wallets';
+import { IHDAccountInfo, SymbolPaperWallet } from 'symbol-paper-wallets/index';
 import { UIHelpers } from '@/core/utils/UIHelpers';
 import { AccountService } from '@/services/AccountService';
 
@@ -121,10 +121,10 @@ export default class ShowMnemonicTs extends Vue {
         const rootAccountInfo: IHDAccountInfo = {
             mnemonic: this.currentMnemonic.plain,
             rootAccountPublicKey: account.publicKey,
-            rootAccountAddress: account.address.pretty(),
+            rootAccountAddress: account.address.plain(),
         };
 
-        const paperWallet = new TWIXPaperWallet(rootAccountInfo, [], this.currentProfile.networkType, this.currentProfile.generationHash);
+        const paperWallet = new SymbolPaperWallet(rootAccountInfo, [], this.currentProfile.networkType, this.currentProfile.generationHash);
         const pdfArray: Uint8Array = await paperWallet.toPdf();
         return UIHelpers.downloadBytesAsFile(pdfArray, `paper-wallet-${this.currentProfile.profileName}`, 'application/pdf');
     }

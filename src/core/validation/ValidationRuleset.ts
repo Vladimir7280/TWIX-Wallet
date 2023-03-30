@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,24 +28,27 @@ export const createValidationRuleSet = ({
     maxMosaicDivisibility,
     maxMosaicDuration,
     minNamespaceDuration,
+    blockGenerationTargetTime,
 }: NetworkConfigurationModel) => {
     return {
         address: 'required|address|addressNetworkType:currentProfile',
         profilePassword: 'required|profilePassword',
         addressOrAlias: 'required|addressOrAlias|addressOrAliasNetworkType:currentProfile',
-        amount: `positiveDecimal|maxDecimals:${maxMosaicDivisibility}`,
+        amount: `positiveDecimal|startsWithZero|maxDecimals:${maxMosaicDivisibility}|maxRelativeAmount:${[
+            maxMosaicAtomicUnits,
+            maxMosaicDivisibility,
+        ]}`,
         confirmPassword: 'required|confirmPassword:@newPassword',
         divisibility: 'required|min_value:0|max_value:4|integer',
         duration: `required|min_value:0|max_value:${maxMosaicDuration}`,
         generationHash: 'required|min:64|max:64',
         mosaicId: 'required|mosaicId',
         message: `maxMessage:${maxMessageSize}`,
-        namespaceDuration: `required|min_value:${
-            minNamespaceDuration / networkConfig[NetworkType.TEST_NET].networkConfigurationDefaults.blockGenerationTargetTime
-        }|maxNamespaceDuration`,
+        namespaceDuration: `required|min_value:${minNamespaceDuration / blockGenerationTargetTime}|maxNamespaceDuration`,
+        // remove symbol from regex when rest https://github.com/nemtech/catapult-rest/issues/631 fixed
         namespaceName: {
             required: true,
-            regex: '^[a-z0-9]{1}[a-z0-9-_]{0,63}$',
+            regex: '^(?!symbol$)([a-z0-9]{1}[a-z0-9-_]{0,63})$',
         },
         subNamespaceName: {
             required: true,

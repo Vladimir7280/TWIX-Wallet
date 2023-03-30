@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,6 +149,10 @@ export default class ImportProfileTs extends Vue {
             10,
         );
         const repositoryFactory = this.$store.getters['network/repositoryFactory'] as RepositoryFactory;
+        if (!repositoryFactory) {
+            return;
+        }
+
         // fetch accounts info
         const accountsInfo = await repositoryFactory.createAccountRepository().getAccountsInfo(this.addressesList).toPromise();
         if (!accountsInfo) {

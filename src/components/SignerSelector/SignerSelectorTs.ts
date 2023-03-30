@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 // @ts-ignore
 import FormRow from '@/components/FormRow/FormRow.vue';
 import { Signer } from '@/store/Account';
+// @ts-ignore
+import SignerBaseFilter from '@/components/SignerBaseFilter/SignerBaseFilter.vue';
 
 @Component({
-    components: { FormRow },
+    components: { FormRow, SignerBaseFilter },
 })
 export class SignerSelectorTs extends Vue {
     /**
@@ -33,9 +35,14 @@ export class SignerSelectorTs extends Vue {
     value: string;
 
     @Prop({
-        default: () => [],
+        default: false,
     })
-    signers: Signer[];
+    isAggregate: boolean;
+
+    @Prop({
+        default: null,
+    })
+    rootSigner: Signer;
 
     @Prop({
         default: 'sender',
@@ -53,13 +60,6 @@ export class SignerSelectorTs extends Vue {
     disabled: boolean;
 
     /// region computed properties getter/setter
-    /**
-     * Value set by the parent component
-     * @type {string}
-     */
-    get chosenSigner(): string {
-        return this.value;
-    }
 
     /**
      * Emit value change
@@ -68,5 +68,16 @@ export class SignerSelectorTs extends Vue {
         this.$emit('input', newValue);
     }
 
+    /**
+     * Value set by the parent component
+     * @type {string}
+     */
+    get chosenSigner(): string {
+        return this.value;
+    }
     /// end-region computed properties getter/setter
+
+    public onSignerSelectorChange(newSigner: string) {
+        this.chosenSigner = newSigner;
+    }
 }

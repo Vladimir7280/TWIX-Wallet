@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-// external dependencies
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-// child components
 import { ValidationObserver } from 'vee-validate';
-// @ts-ignore
 import MosaicSelector from '@/components/MosaicSelector/MosaicSelector.vue';
-// @ts-ignore
 import AmountInput from '@/components/AmountInput/AmountInput.vue';
-// @ts-ignore
 import ButtonRemove from '@/components/ButtonRemove/ButtonRemove.vue';
-// @ts-ignore
 import FormRow from '@/components/FormRow/FormRow.vue';
+import { Formatters } from '@/core/utils/Formatters';
 
 @Component({
     components: {
@@ -38,10 +33,10 @@ import FormRow from '@/components/FormRow/FormRow.vue';
 export class MosaicAttachmentInputTs extends Vue {
     /**
      * Initial value set by the parent
-     * @type {{mosaicHex: string, amount: number}}
+     * @type {{mosaicHex: string, amount: string}}
      */
     @Prop({
-        default: { mosaicHex: '', amount: 0 },
+        default: { mosaicHex: '', amount: '0' },
         required: true,
     })
     mosaicAttachment: { mosaicHex: string; amount: string };
@@ -56,7 +51,7 @@ export class MosaicAttachmentInputTs extends Vue {
      * Hex ids of mosaics to show in options
      * @type {string[]}
      */
-    @Prop({ default: [] }) mosaicHexIds: string[];
+    @Prop({ default: () => [] }) mosaicHexIds: string[];
 
     /**
      * Whether to show absolute amounts or not
@@ -69,16 +64,52 @@ export class MosaicAttachmentInputTs extends Vue {
     @Prop({ default: true }) isShowDelete: boolean;
 
     /**
+     * True if the user is in offline mode
+     */
+    @Prop({ default: false }) isOffline: boolean;
+
+    /**
      * whether to show the label accord to isFirstItem
      */
     @Prop({ default: true }) isFirstItem: boolean;
+    @Prop({ default: 0 }) selectedFeeValue: number;
+    @Prop({ default: false }) isAggregate: boolean;
+
     /**
      * Updated value to sync with the parent formItems
      * @protected
      * @type {{mosaicHex: string, amount: number}}
      */
     protected get chosenValue(): { mosaicHex: string; amount: string } {
-        return this.mosaicAttachment;
+        if (!this.mosaicAttachment) {
+            return {
+                mosaicHex: '',
+                amount: '0',
+            };
+        }
+
+        if (!this.mosaicAttachment.amount) {
+            return {
+                ...this.mosaicAttachment,
+                amount: '0',
+            };
+        }
+
+        if (!navigator.languages) {
+            return this.mosaicAttachment;
+        }
+
+        const decimalSeparator = Formatters.getDecimalSeparator(navigator.languages[0]);
+        let formattedAmount = this.mosaicAttachment.amount;
+
+        if (decimalSeparator !== ',') {
+            formattedAmount = this.mosaicAttachment.amount.replace(',', '');
+        }
+
+        return {
+            ...this.mosaicAttachment,
+            amount: formattedAmount,
+        };
     }
 
     /**
@@ -117,16 +148,8 @@ export class MosaicAttachmentInputTs extends Vue {
      */
     public formItems = {
         selectedMosaicHex: '',
-        relativeAmount: this.chosenValue?.amount || '0',
+        relativeAmount: this.chosenValue.amount,
     };
-
-    get selectedMosaic(): string {
-        return this.formItems.selectedMosaicHex;
-    }
-
-    set selectedMosaic(hex: string) {
-        this.formItems.selectedMosaicHex = hex;
-    }
 
     get relativeAmount(): string {
         return this.formItems.relativeAmount;
@@ -135,14 +158,6 @@ export class MosaicAttachmentInputTs extends Vue {
     set relativeAmount(amount: string) {
         this.formItems.relativeAmount = amount;
     }
-
-    get canClickAdd(): boolean {
-        if (!this.formItems.selectedMosaicHex || undefined === this.formItems.relativeAmount) {
-            return false;
-        }
-
-        return true;
-    }
     /// end-region computed properties getter/setter
 
     mounted() {
@@ -150,7 +165,7 @@ export class MosaicAttachmentInputTs extends Vue {
     }
 
     @Watch('mosaicAttachment')
-    public onMosaicAttachmentChange(mosaicAttachment: { mosaicHex: string; amount: string }) {
-        this.relativeAmount = mosaicAttachment.amount;
+    public onMosaicAttachmentChange() {
+        this.relativeAmount = this.chosenValue.amount;
     }
 }

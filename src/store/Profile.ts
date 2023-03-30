@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ interface ProfileState {
     currentProfile: ProfileModel;
     isAuthenticated: boolean;
     isSettingsVisible: boolean;
+    isNetworkSettingsSelected: boolean;
 }
 
 const profileState: ProfileState = {
@@ -40,6 +41,7 @@ const profileState: ProfileState = {
     currentProfile: null,
     isAuthenticated: false,
     isSettingsVisible: false,
+    isNetworkSettingsSelected: false,
 };
 export default {
     namespaced: true,
@@ -52,6 +54,7 @@ export default {
         isPrivateKeyProfile: (state: ProfileState): boolean => {
             return state.currentProfile ? !state.currentProfile.seed : false;
         },
+        isNetworkSettingsSelected: (state: ProfileState) => state.isNetworkSettingsSelected,
     },
     mutations: {
         setInitialized: (state: ProfileState, initialized: boolean) => {
@@ -61,6 +64,9 @@ export default {
         setAuthenticated: (state: ProfileState, isAuthenticated: boolean) => Vue.set(state, 'isAuthenticated', isAuthenticated),
         toggleSettings: (state: ProfileState) => {
             state.isSettingsVisible = !state.isSettingsVisible;
+        },
+        toggleNetworkSettings: (state: ProfileState, networkTabSelector: boolean) => {
+            state.isNetworkSettingsSelected = networkTabSelector;
         },
     },
     actions: {
@@ -86,7 +92,7 @@ export default {
         async LOG_OUT({ dispatch, rootGetters }): Promise<void> {
             const currentAccount = rootGetters['account/currentAccount'];
             if (currentAccount) {
-                await dispatch('account/uninitialize', { address: currentAccount.address }, { root: true });
+                await dispatch('account/uninitialize', { root: true });
             }
             await dispatch('network/UNSUBSCRIBE', undefined, { root: true });
             await dispatch('account/SET_KNOWN_ACCOUNTS', [], { root: true });
@@ -110,7 +116,7 @@ export default {
 
             dispatch('diagnostic/ADD_DEBUG', 'Changing current profile to ' + currentProfile.profileName, { root: true });
 
-            const settings = new SettingService().getProfileSettings(currentProfile.profileName, currentProfile.networkType);
+            const settings = new SettingService().getProfileSettings(currentProfile.profileName);
             dispatch('app/SET_SETTINGS', settings, { root: true });
             dispatch('addressBook/LOAD_ADDRESS_BOOK', null, { root: true });
 

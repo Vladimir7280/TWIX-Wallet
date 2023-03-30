@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,14 @@ import { HarvestingModel } from '@/core/database/entities/HarvestingModel';
 import { NodeModel } from '@/core/database/entities/NodeModel';
 import { URLHelpers } from '@/core/utils/URLHelpers';
 import { HarvestingService } from '@/services/HarvestingService';
+import { NodeService } from '@/services/NodeService';
 import { PageInfo } from '@/store/Transaction';
 import { map, reduce } from 'rxjs/operators';
 import {
     AccountInfo,
     Address,
     BalanceChangeReceipt,
+    NetworkType,
     Order,
     ReceiptPaginationStreamer,
     ReceiptType,
@@ -89,6 +91,12 @@ const initialState: HarvestingState = {
     pollingTrials: 1,
 };
 
+export const HARVESTING_STATUS_POLLING_TRIAL_LIMIT = 60;
+export const HARVESTING_STATUS_POLLING_INTERVAL_SECS = 10;
+export const HARVESTING_BLOCKS_POLLING_INTERVAL_SECS = 30;
+
+const harvestingService = new HarvestingService();
+
 export default {
     namespaced: true,
     state: initialState,
@@ -147,47 +155,102 @@ export default {
         SET_POLLING_TRIALS({ commit }, pollingTrials) {
             commit('setPollingTrials', pollingTrials);
         },
-        async FETCH_STATUS({ commit, rootGetters }, nodeUrl?: string) {
-            const currentSignerAccountInfo: AccountInfo = rootGetters['account/currentSignerAccountInfo'];
+        async FETCH_STATUS({ commit, rootGetters, dispatch }, node?: [string, NodeModel]) {
+            const currentSignerAddress: Address = rootGetters['account/currentSignerAddress'];
+            const currentSignerHarvestingModel: HarvestingModel = rootGetters['harvesting/currentSignerHarvestingModel'];
+            if (
+                currentSignerHarvestingModel?.accountAddress &&
+                currentSignerAddress.plain() !== currentSignerHarvestingModel.accountAddress
+            ) {
+                return;
+            }
+            const repositoryFactory = rootGetters['network/repositoryFactory'];
+            const currentSignerAccountInfo = (
+                await repositoryFactory.createAccountRepository().getAccountsInfo([currentSignerAddress]).toPromise()
+            )[0];
+
             // reset
             let status: HarvestingStatus;
             if (!currentSignerAccountInfo) {
+                commit('status', HarvestingStatus.INACTIVE);
                 return;
             }
-            const currentSignerHarvestingModel: HarvestingModel = rootGetters['harvesting/currentSignerHarvestingModel'];
             let accountUnlocked = false;
+            const accountNodePublicKey = currentSignerAccountInfo?.supplementalPublicKeys?.node?.publicKey;
+            const accountRemotePublicKey = currentSignerAccountInfo?.supplementalPublicKeys?.linked?.publicKey;
 
             if (currentSignerHarvestingModel) {
-                //find the node url from currentSignerHarvestingModel (localStorage)
-                const selectedNode = currentSignerHarvestingModel.selectedHarvestingNode;
-                const harvestingNodeUrl = selectedNode?.url || nodeUrl;
-                let unlockedAccounts: string[] = [];
+                // To verify local account key link info
+                dispatch('UPDATE_LOCAL_ACCOUNT_LINK_PRIVATE_KEY', {
+                    currentSignerAccountInfo,
+                    currentSignerHarvestingModel,
+                });
 
-                if (harvestingNodeUrl) {
-                    const repositoryFactory = new RepositoryFactoryHttp(URLHelpers.getNodeUrl(harvestingNodeUrl));
-                    const nodeRepository = repositoryFactory.createNodeRepository();
-                    try {
-                        unlockedAccounts = await nodeRepository.getUnlockedAccount().toPromise();
-                    } catch (error) {
-                        //proceed
+                // Update selectedHarvestingNode to empty, if account node & remote public key not existing
+                if (!accountNodePublicKey && !accountRemotePublicKey) {
+                    dispatch('UPDATE_ACCOUNT_SELECTED_HARVESTING_NODE', {
+                        accountAddress: currentSignerHarvestingModel.accountAddress,
+                        selectedHarvestingNode: { nodePublicKey: '' } as NodeModel,
+                    });
+                } else {
+                    // if selectedHarvestingNode empty update with newSelectedHarvestingNode
+                    if (currentSignerHarvestingModel.selectedHarvestingNode?.nodePublicKey === '') {
+                        const harvestingModel = harvestingService.getHarvestingModel(currentSignerHarvestingModel.accountAddress);
+                        dispatch('UPDATE_ACCOUNT_SELECTED_HARVESTING_NODE', {
+                            accountAddress: currentSignerHarvestingModel.accountAddress,
+                            selectedHarvestingNode: harvestingModel.newSelectedHarvestingNode,
+                        });
                     }
                 }
-                const remotePublicKey = currentSignerAccountInfo.supplementalPublicKeys?.linked?.publicKey;
-                accountUnlocked = unlockedAccounts?.some((publicKey) => publicKey === remotePublicKey);
             }
+            //find the node url from currentSignerHarvestingModel (localStorage)
+            const selectedNode = currentSignerHarvestingModel?.selectedHarvestingNode;
+            const nodeService = new NodeService();
+            const networkType: NetworkType = rootGetters['network/networkType'];
+            // try to find owned node with currentSignerAccountInfo.publicKey
+            let nodeInfo = await nodeService.getNodeFromStatisticServiceByPublicKey(networkType, currentSignerAccountInfo.publicKey);
+
+            // try to find a linked node if it is not an owned node
+            if (!nodeInfo && accountNodePublicKey) {
+                nodeInfo = await nodeService.getNodeFromStatisticServiceByNodePublicKey(networkType, accountNodePublicKey);
+            }
+            let unlockedAccounts: string[] = [];
+
+            // set the harvesting node url, first try linked or owned node url if not available try stored url info and lastly the passed parameter node[0]
+            const harvestingNodeUrl = nodeInfo?.url || selectedNode?.url || (node && !!node.length ? node[0] : '');
+            if (harvestingNodeUrl) {
+                const repositoryFactory = new RepositoryFactoryHttp(URLHelpers.getNodeUrl(harvestingNodeUrl));
+                const nodeRepository = repositoryFactory.createNodeRepository();
+                try {
+                    unlockedAccounts = await nodeRepository.getUnlockedAccount().toPromise();
+                } catch (error) {
+                    // proceed
+                }
+            }
+            accountUnlocked = unlockedAccounts?.some((publicKey) => publicKey === accountRemotePublicKey);
+
             const allKeysLinked =
                 currentSignerAccountInfo.supplementalPublicKeys?.linked &&
                 currentSignerAccountInfo.supplementalPublicKeys?.node &&
                 currentSignerAccountInfo.supplementalPublicKeys?.vrf;
-            if (allKeysLinked) {
+            if (allKeysLinked || accountUnlocked) {
                 const pollingTrials = rootGetters['harvesting/pollingTrials'];
                 status = accountUnlocked
                     ? HarvestingStatus.ACTIVE
                     : currentSignerHarvestingModel?.isPersistentDelReqSent
-                    ? pollingTrials === 20 || currentSignerHarvestingModel?.delegatedHarvestingRequestFailed
+                    ? pollingTrials === HARVESTING_STATUS_POLLING_TRIAL_LIMIT ||
+                      currentSignerHarvestingModel?.delegatedHarvestingRequestFailed
                         ? HarvestingStatus.FAILED
                         : HarvestingStatus.INPROGRESS_ACTIVATION
                     : HarvestingStatus.KEYS_LINKED;
+                if (status === HarvestingStatus.ACTIVE && node && node[1]) {
+                    // @ts-ignore
+                    dispatch('UPDATE_ACCOUNT_SELECTED_HARVESTING_NODE', {
+                        accountAddress: currentSignerHarvestingModel.accountAddress,
+                        // @ts-ignore
+                        selectedHarvestingNode: node[1],
+                    });
+                }
             } else {
                 status = accountUnlocked ? HarvestingStatus.INPROGRESS_DEACTIVATION : HarvestingStatus.INACTIVE;
             }
@@ -203,7 +266,6 @@ export default {
             }
 
             const targetAddress = currentSignerAddress;
-            // for testing => const targetAddress = Address.createFromRawAddress('TD5YTEJNHOMHTMS6XESYAFYUE36COQKPW6MQQQY');
 
             commit('isFetchingHarvestedBlocks', true);
 
@@ -221,9 +283,13 @@ export default {
                             (t) =>
                                 (({
                                     blockNo: t.height,
-                                    fee: (t.receipts as BalanceChangeReceipt[]).find(
-                                        (r) => r.targetAddress.plain() === targetAddress.plain(),
-                                    )?.amount,
+                                    fee: (t.receipts as BalanceChangeReceipt[]).reduce((acc, r) => {
+                                        if (r.targetAddress && r.targetAddress.plain() === targetAddress.plain()) {
+                                            return acc.add(r.amount);
+                                        } else {
+                                            return acc;
+                                        }
+                                    }, UInt64.fromUint(0)),
                                 } as unknown) as HarvestedBlock),
                         );
                         const pageInfo = { isLastPage: pageTxStatement.isLastPage, pageNumber: pageTxStatement.pageNumber };
@@ -283,7 +349,6 @@ export default {
                 });
         },
         SET_CURRENT_SIGNER_HARVESTING_MODEL({ commit }, currentSignerAddress) {
-            const harvestingService = new HarvestingService();
             let harvestingModel = harvestingService.getHarvestingModel(currentSignerAddress);
             if (!harvestingModel) {
                 harvestingModel = { accountAddress: currentSignerAddress };
@@ -295,57 +360,157 @@ export default {
             { commit },
             { accountAddress, signedPersistentDelReqTxs }: { accountAddress: string; signedPersistentDelReqTxs: SignedTransaction[] },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateSignedPersistentDelReqTxs(harvestingModel, signedPersistentDelReqTxs);
-            commit('currentSignerHarvestingModel', harvestingModel);
+            if (harvestingModel) {
+                harvestingService.updateSignedPersistentDelReqTxs(harvestingModel, signedPersistentDelReqTxs);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
         },
         UPDATE_ACCOUNT_IS_PERSISTENT_DEL_REQ_SENT(
             { commit },
             { accountAddress, isPersistentDelReqSent }: { accountAddress: string; isPersistentDelReqSent: boolean },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateIsPersistentDelReqSent(harvestingModel, isPersistentDelReqSent);
-            commit('currentSignerHarvestingModel', harvestingModel);
+            if (harvestingModel) {
+                harvestingService.updateIsPersistentDelReqSent(harvestingModel, isPersistentDelReqSent);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
         },
         UPDATE_ACCOUNT_SELECTED_HARVESTING_NODE(
             { commit },
             { accountAddress, selectedHarvestingNode }: { accountAddress: string; selectedHarvestingNode: NodeModel },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateSelectedHarvestingNode(harvestingModel, selectedHarvestingNode);
-            commit('currentSignerHarvestingModel', harvestingModel);
-            harvestingService.updateDelegatedHarvestingRequestFailed(harvestingModel, false);
-            commit('setPollingTrials', 1);
+            if (harvestingModel) {
+                harvestingService.updateSelectedHarvestingNode(harvestingModel, selectedHarvestingNode);
+                commit('currentSignerHarvestingModel', harvestingModel);
+                harvestingService.updateDelegatedHarvestingRequestFailed(harvestingModel, false);
+                commit('setPollingTrials', 1);
+            }
+        },
+        UPDATE_ACCOUNT_NEW_SELECTED_HARVESTING_NODE(
+            { commit },
+            { accountAddress, newSelectedHarvestingNode }: { accountAddress: string; newSelectedHarvestingNode: NodeModel },
+        ) {
+            const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
+            if (harvestingModel) {
+                harvestingService.updateNewSelectedHarvestingNode(harvestingModel, newSelectedHarvestingNode);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
         },
         UPDATE_REMOTE_ACCOUNT_PRIVATE_KEY(
             { commit },
             { accountAddress, encRemotePrivateKey }: { accountAddress: string; encRemotePrivateKey: string },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateRemoteKey(harvestingModel, encRemotePrivateKey);
+            if (harvestingModel) {
+                harvestingService.updateRemoteKey(harvestingModel, encRemotePrivateKey);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
+        },
+        UPDATE_NEW_REMOTE_KEY_INFO(
+            { commit },
+            {
+                accountAddress,
+                newEncRemotePrivateKey,
+                newRemotePublicKey,
+            }: { accountAddress: string; newEncRemotePrivateKey: string; newRemotePublicKey: string },
+        ) {
+            const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
+            harvestingService.updateNewAccountLinkKeyInfo(harvestingModel, {
+                newEncRemotePrivateKey,
+                newRemotePublicKey,
+            });
             commit('currentSignerHarvestingModel', harvestingModel);
         },
         UPDATE_VRF_ACCOUNT_PRIVATE_KEY(
             { commit },
             { accountAddress, encVrfPrivateKey }: { accountAddress: string; encVrfPrivateKey: string },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateVrfKey(harvestingModel, encVrfPrivateKey);
-            commit('currentSignerHarvestingModel', harvestingModel);
+            if (harvestingModel) {
+                harvestingService.updateVrfKey(harvestingModel, encVrfPrivateKey);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
+        },
+        UPDATE_NEW_VRF_KEY_INFO(
+            { commit },
+            {
+                accountAddress,
+                newEncVrfPrivateKey,
+                newVrfPublicKey,
+            }: { accountAddress: string; newEncVrfPrivateKey: string; newVrfPublicKey: string },
+        ) {
+            const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
+            if (harvestingModel) {
+                harvestingService.updateNewAccountLinkKeyInfo(harvestingModel, { newEncVrfPrivateKey, newVrfPublicKey });
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
         },
         UPDATE_HARVESTING_REQUEST_STATUS(
             { commit },
             { accountAddress, delegatedHarvestingRequestFailed }: { accountAddress: string; delegatedHarvestingRequestFailed: boolean },
         ) {
-            const harvestingService = new HarvestingService();
             const harvestingModel = harvestingService.getHarvestingModel(accountAddress);
-            harvestingService.updateDelegatedHarvestingRequestFailed(harvestingModel, delegatedHarvestingRequestFailed);
-            commit('currentSignerHarvestingModel', harvestingModel);
+            if (harvestingModel) {
+                harvestingService.updateDelegatedHarvestingRequestFailed(harvestingModel, delegatedHarvestingRequestFailed);
+                commit('currentSignerHarvestingModel', harvestingModel);
+            }
+        },
+        UPDATE_LOCAL_ACCOUNT_LINK_PRIVATE_KEY(
+            { dispatch },
+            {
+                currentSignerAccountInfo,
+                currentSignerHarvestingModel,
+            }: { currentSignerAccountInfo: AccountInfo; currentSignerHarvestingModel: HarvestingModel },
+        ) {
+            const { address, supplementalPublicKeys } = currentSignerAccountInfo;
+            const accountAddress = address.plain();
+            const { linked, vrf } = supplementalPublicKeys;
+            const {
+                newEncRemotePrivateKey,
+                newEncVrfPrivateKey,
+                newRemotePublicKey,
+                newVrfPublicKey,
+                encRemotePrivateKey,
+                encVrfPrivateKey,
+            } = currentSignerHarvestingModel;
+
+            // If remote key link not exist from network or local
+            // Set local encRemotePrivateKey to null
+            if (!linked || !newRemotePublicKey) {
+                dispatch('UPDATE_REMOTE_ACCOUNT_PRIVATE_KEY', {
+                    accountAddress,
+                    encRemotePrivateKey: null,
+                });
+            }
+
+            if (newRemotePublicKey && linked?.publicKey) {
+                if (newRemotePublicKey === linked.publicKey) {
+                    dispatch('UPDATE_REMOTE_ACCOUNT_PRIVATE_KEY', {
+                        accountAddress,
+                        encRemotePrivateKey: newEncRemotePrivateKey || encRemotePrivateKey,
+                    });
+                }
+            }
+
+            // If vrf key link not exist from network or local
+            // Set local encVrfPrivateKey to null
+            if (!vrf || !newVrfPublicKey) {
+                dispatch('UPDATE_VRF_ACCOUNT_PRIVATE_KEY', {
+                    accountAddress,
+                    encVrfPrivateKey: null,
+                });
+            }
+
+            if (newVrfPublicKey && vrf?.publicKey) {
+                if (newVrfPublicKey === vrf?.publicKey) {
+                    dispatch('UPDATE_VRF_ACCOUNT_PRIVATE_KEY', {
+                        accountAddress,
+                        encVrfPrivateKey: newEncVrfPrivateKey || encVrfPrivateKey,
+                    });
+                }
+            }
         },
         /// end-region scoped actions
     },

@@ -38,13 +38,15 @@ export class URLHelpers {
      * @return {string}
      */
     public static getNodeUrl(fromUrl: string): string {
+        console.log('TESTTEST 3', fromUrl);
         let fixedUrl = -1 === fromUrl.indexOf('://') ? 'http://' + fromUrl : fromUrl;
-
+        console.log('TESTTEST 4', fixedUrl);
         fixedUrl = !fixedUrl.match(/https?:\/\/[^:]+:([0-9]+)\/?$/)
-            ? fixedUrl + ':3000' // default adds :3000
+            ? fixedUrl + ':3000' // default adds :3001
             : fixedUrl;
-
+            console.log('TESTTEST 5', fixedUrl);
         const url = URLHelpers.formatUrl(fixedUrl);
+        console.log('TESTTEST 6', url.protocol);
         return url.protocol + '//' + url.hostname + (url.port ? ':' + url.port : ':3000');
     }
 }

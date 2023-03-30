@@ -4,7 +4,7 @@
             <Alert class="alert warning_alert" type="error">
                 <Icon type="ios-warning-outline" />
                 {{ $t(`${alert.message}`) }}
-                <a v-if="alert.showRetry" @click="reconnect">{{ $t('click_to_retry') }}</a>
+                <a v-if="alert.showRetry" @click="reconnect">{{ ` ${'(' + $t('click_to_retry') + ')'}` }}</a>
             </Alert>
         </div>
         <div v-else-if="info.show">
@@ -21,9 +21,6 @@
                     <div class="level-left">
                         <!--<AppLogo class="level-item" />-->
                     </div>
-
-                    <!--OCA99: These are window controls for electron. Disabling them for now. Not sure if they should be here.-->
-                    <!--<WindowControls />-->
 
                     <div class="level-right">
                         <ImportQRButton v-if="!!currentAccount" class="level-item navbar-item" valid-qr-types="[1, 3, 4, 8, 9]" />

@@ -14,15 +14,12 @@
                         <div class="info-text">
                             <p v-if="harvestingStatus === 'INACTIVE'">
                                 {{ $t('harvesting_delegated_description') }}
+                                <a :href="symbolDocsScamAlertUrl" target="_blank"> {{ $t('link_docs_scam') }} </a>
                             </p>
-                            <p v-if="harvestingStatus === 'INACTIVE' && !isActivatedFromAnotherDevice">
+                            <p v-if="harvestingStatus === 'INACTIVE'">
                                 {{ $t('harvesting_node_selection') }}
+                                <a :href="allNodeListUrl" target="_blank"> {{ $t('open_explorer_node_list') }} </a>
                             </p>
-                            <Alert
-                                :visible="isActivatedFromAnotherDevice"
-                                type="danger"
-                                :value="$t('harvesting_activated_from_another_device')"
-                            />
                             <Alert
                                 :visible="harvestingStatus === 'KEYS_LINKED' && isPublicAndPrivateKeysLinked"
                                 type="warning"
@@ -36,7 +33,7 @@
                         </div>
 
                         <!-- Transaction signer selector -->
-                        <SignerSelector v-model="formItems.signerAddress" :signers="signers" @input="onChangeSigner" />
+                        <SignerSelector v-model="formItems.signerAddress" :root-signer="currentAccountSigner" @input="onChangeSigner" />
 
                         <NetworkNodeSelector
                             v-model="formItems.nodeModel"
@@ -50,7 +47,7 @@
                             <template v-slot:label> {{ $t('fee') }}: </template>
                             <template v-slot:inputs>
                                 <MaxFeeSelector v-model="formItems.maxFee" :show-fee-label="false" />
-                                <span v-if="LowFeeValue" class="fee-warning">
+                                <span v-if="lowFeeValue" class="fee-warning">
                                     <Icon type="ios-warning-outline" />
                                     {{ $t('low_fee_warning_message') }}
                                 </span>
@@ -61,48 +58,31 @@
                             <template v-slot:inputs>
                                 <div class="harvesting-buttons-container">
                                     <button
-                                        v-if="harvestingStatus === 'INACTIVE'"
+                                        v-if="
+                                            harvestingStatus === 'INACTIVE' ||
+                                            harvestingStatus === 'KEYS_LINKED' ||
+                                            harvestingStatus === 'FAILED'
+                                        "
                                         type="submit"
                                         class="centered-button button-style submit-button inverted-button"
-                                        :disabled="linking"
+                                        :disabled="actionStarted"
                                         @click="handleSubmit(onStartClick())"
                                     >
-                                        {{ linking ? $t('linking') : $t('link_keys') }}
+                                        {{ actionStarted ? $t('starting') : $t('start_harvesting') }}
                                     </button>
                                     <button
-                                        v-if="!isPersistentDelReqSent && harvestingStatus !== 'INACTIVE' && harvestingStatus !== 'ACTIVE'"
-                                        class="centered-button button-style submit-button inverted-button"
-                                        :disabled="activating || linking || !isPublicAndPrivateKeysLinked"
-                                        @click="handleSubmit(onActivate())"
-                                    >
-                                        {{ activating ? $t('requesting') : $t('request_harvesting') }}
-                                    </button>
-                                    <!-- <button
-                                        v-if="isPersistentDelReqSent && harvestingStatus !== 'INACTIVE'"
-                                        type="submit"
-                                        class="centered-button button-style submit-button inverted-button"
-                                        :disabled="swapDisabled"
-                                        @click="handleSubmit(onSwap())"
-                                    >
-                                        {{ $t('swap') }}
-                                    </button> -->
-                                    <button
-                                        v-if="harvestingStatus !== 'INACTIVE' && harvestingStatus !== 'KEYS_LINKED'"
+                                        v-if="
+                                            harvestingStatus !== 'INACTIVE' &&
+                                            harvestingStatus !== 'KEYS_LINKED' &&
+                                            harvestingStatus !== 'FAILED' &&
+                                            isNodeKeyLinked
+                                        "
                                         type="submit"
                                         class="centered-button button-style submit-button danger-button"
-                                        :disabled="linking || activating"
+                                        :disabled="actionStarted"
                                         @click="handleSubmit(onStop())"
                                     >
-                                        {{ linking ? $t('stoping') : $t('stop_harvesting') }}
-                                    </button>
-                                    <button
-                                        v-if="harvestingStatus === 'KEYS_LINKED'"
-                                        type="submit"
-                                        class="centered-button secondary-outline-button button-style submit-button button"
-                                        :disabled="linking || activating"
-                                        @click="handleSubmit(onStop())"
-                                    >
-                                        {{ linking ? $t('unlinking') : $t('unlink_keys') }}
+                                        {{ actionStarted ? $t('stoping') : $t('stop_harvesting') }}
                                     </button>
                                 </div>
                             </template>
@@ -114,21 +94,12 @@
                                 {{ $t('delegated_harvesting_keys_info') }}
                             </span>
                             <Alert
-                                :visible="isVrfKeyLinked && isAccountKeyLinked && !isNodeKeyLinked"
+                                :visible="isVrfKeyLinked && isAccountKeyLinked && !isNodeKeyLinked && !getNodeOperatorPublicKey()"
                                 type="warning"
                                 :value="$t('remote_keys_linked')"
                             />
-                            <Alert :visible="isActivatedFromAnotherDevice" type="warning" :value="$t('harvesting_status_not_detected')" />
                         </div>
-                        <!-- <FormRow class="form-warning-row" v-if="harvestingStatus !== 'INACTIVE'">
-                            <template v-slot:inputs>
-                                <div  type="warning" class="warning-node-swap">
-                                    <Icon type="ios-warning-outline" />
-                                    {{ $t('harvesting_warning_node_swap') }}
-                                </div>
-                            </template>
-                        </FormRow> -->
-                        <div class="key-item separtate-spacing">
+                        <div class="key-item separate-spacing">
                             <FormRow>
                                 <template v-slot:label> {{ $t('linked_node_public_key') }}: </template>
 
@@ -136,6 +107,7 @@
                                     <AccountPublicKeyDisplay
                                         v-if="isNodeKeyLinked"
                                         :public-key="currentSignerAccountInfo.supplementalPublicKeys.node.publicKey"
+                                        data-testid="nodePublicKeyDisplay"
                                     />
                                     <Tooltip
                                         v-else
@@ -153,10 +125,17 @@
                                 v-if="!isNodeKeyLinked"
                                 :src="linkIcon"
                                 class="button-icon"
+                                data-testid="btn_linkNodeKey"
                                 @click="handleSubmit(onSingleKeyOperation('node'))"
                             />
                             <Tooltip v-else word-wrap placement="bottom" :content="$t('label_unlink_node_account_public_key')">
-                                <Icon type="md-trash" class="button-icon" size="20" @click="handleSubmit(onSingleKeyOperation('node'))" />
+                                <Icon
+                                    type="md-trash"
+                                    class="button-icon"
+                                    size="20"
+                                    data-testid="btn_unlinkNodeKey"
+                                    @click="handleSubmit(onSingleKeyOperation('node'))"
+                                />
                             </Tooltip>
                         </div>
                         <!-- link/unlink button for node public key -->
@@ -168,6 +147,7 @@
                                     <AccountPublicKeyDisplay
                                         v-if="isAccountKeyLinked"
                                         :public-key="currentSignerAccountInfo.supplementalPublicKeys.linked.publicKey"
+                                        data-testid="accountPublicKeyDisplay"
                                     />
                                     <Tooltip
                                         v-else
@@ -185,6 +165,7 @@
                                 v-if="!isAccountKeyLinked"
                                 :src="linkIcon"
                                 class="button-icon"
+                                data-testid="btn_linkAccountKey"
                                 @click="handleSubmit(onSingleKeyOperation('account'))"
                             />
                             <Tooltip v-else word-wrap placement="bottom" :content="$t('label_unlink_remote_account_public_key')">
@@ -192,13 +173,14 @@
                                     type="md-trash"
                                     class="button-icon"
                                     size="20"
+                                    data-testid="btn_unlinkAccountKey"
                                     @click="handleSubmit(onSingleKeyOperation('account'))"
                                 />
                             </Tooltip>
                         </div>
                         <!-- link/unlink button for remote account public key -->
 
-                        <div class="key-item separtate-spacing">
+                        <div class="key-item separate-spacing">
                             <FormRow>
                                 <template v-slot:label> {{ $t('linked_remote_private_key') }}: </template>
                                 <template v-slot:inputs>
@@ -220,6 +202,7 @@
                                     <AccountPublicKeyDisplay
                                         v-if="isVrfKeyLinked"
                                         :public-key="currentSignerAccountInfo.supplementalPublicKeys.vrf.publicKey"
+                                        data-testid="vrfPublicKeyDisplay"
                                     />
                                     <Tooltip
                                         v-else
@@ -237,10 +220,17 @@
                                 v-if="!isVrfKeyLinked"
                                 :src="linkIcon"
                                 class="button-icon"
+                                data-testid="btn_linkVrfKey"
                                 @click="handleSubmit(onSingleKeyOperation('vrf'))"
                             />
                             <Tooltip v-else word-wrap placement="bottom" :content="$t('label_unlink_vrf_account_public_key')">
-                                <Icon type="md-trash" class="button-icon" size="20" @click="handleSubmit(onSingleKeyOperation('vrf'))" />
+                                <Icon
+                                    type="md-trash"
+                                    class="button-icon"
+                                    size="20"
+                                    data-testid="btn_unlinkVrfKey"
+                                    @click="handleSubmit(onSingleKeyOperation('vrf'))"
+                                />
                             </Tooltip>
                         </div>
 
@@ -263,7 +253,7 @@
                                 <template v-slot:label> {{ $t('fee') }}: </template>
                                 <template v-slot:inputs>
                                     <MaxFeeSelector v-model="formItems.maxFee" :show-fee-label="false" />
-                                    <span v-if="LowFeeValue" class="fee-warning">
+                                    <span v-if="lowFeeValue" class="fee-warning">
                                         <Icon type="ios-warning-outline" />
                                         {{ $t('low_fee_warning_message') }}
                                     </span>
@@ -282,18 +272,11 @@
             @confirmed="showModalImportKey = false"
         />
         <ModalFormProfileUnlock
-            v-if="hasAccountUnlockModal || isLedger"
+            v-if="hasAccountUnlockModal"
             :visible="hasAccountUnlockModal"
             :on-success="onAccountUnlocked"
-            :message="$t('activate_delegated_harvesting_message')"
+            :message="$t(isLedger ? 'encrypt_ledger_keys_on_sign' : 'activate_delegated_harvesting_message')"
             @close="hasAccountUnlockModal = false"
-        />
-        <ModalFormProfileUnlock
-            v-if="hasLedgerAccountUnlockModal"
-            :visible="hasLedgerAccountUnlockModal"
-            :on-success="onLedgerAccountUnlocked"
-            :message="$t('encrypt_ledger_keys_on_sign')"
-            @close="hasLedgerAccountUnlockModal = false"
         />
         <ModalTransactionConfirmation
             v-if="hasConfirmationModal"

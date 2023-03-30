@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfi
             defaultFee: 'app/defaultFee',
             currentAccount: 'account/currentAccount',
             selectedSigner: 'account/currentSigner',
+            currentAccountSigner: 'account/currentAccountSigner',
             currentSignerPublicKey: 'account/currentSignerPublicKey',
             currentSignerAddress: 'account/currentSignerAddress',
             currentSignerMultisigInfo: 'account/currentSignerMultisigInfo',
@@ -44,6 +45,8 @@ import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfi
             networkConfiguration: 'network/networkConfiguration',
             transactionFees: 'network/transactionFees',
             isOfflineMode: 'network/isOfflineMode',
+            multisigAccountGraphInfo: 'account/multisigAccountGraphInfo',
+            clientServerTimeDifference: 'network/clientServerTimeDifference',
         }),
     },
 })
@@ -128,6 +131,8 @@ export class FormTransactionBase extends Vue {
 
     public signers: Signer[];
 
+    public currentAccountSigner: Signer;
+
     public networkCurrency: NetworkCurrencyModel;
 
     public networkConfiguration: NetworkConfigurationModel;
@@ -137,6 +142,14 @@ export class FormTransactionBase extends Vue {
     protected transactionFees: TransactionFees;
 
     protected isOfflineMode: boolean;
+
+    protected multisigAccountGraphInfo: MultisigAccountInfo[];
+
+    protected clientServerTimeDifference: number;
+
+    protected transactionFeesLoadingFinished = false;
+
+    protected clientServerTimeDifferenceLoadingFinished = false;
 
     /**
      * Type the ValidationObserver refs
@@ -170,34 +183,21 @@ export class FormTransactionBase extends Vue {
      * @return {void}
      */
     public async created() {
-        this.$store.dispatch('network/LOAD_TRANSACTION_FEES');
+        this.$store.dispatch('network/LOAD_TRANSACTION_FEES').finally(() => {
+            Vue.set(this, 'transactionFeesLoadingFinished', true);
+        });
+        this.$store.dispatch('network/SET_CLIENT_SERVER_TIME_DIFFERENCE').finally(() => {
+            Vue.set(this, 'clientServerTimeDifferenceLoadingFinished', true);
+        });
         this.resetForm();
     }
 
     /**
      * it creates the deadlines for the transactions.
      */
-    protected createDeadline(): Deadline {
-        return Deadline.create(this.epochAdjustment);
-    }
-
-    /**
-     * Hook called when the component is being destroyed (before)
-     * @return {void}
-     */
-    public async beforeDestroy() {
-        // reset the selected signer if it is not the current account
-        if (!this.currentAccount) {
-            return;
-        }
-
-        if (!this.selectedSigner.address.equals(Address.createFromRawAddress(this.currentAccount.address))) {
-            await this.$store.dispatch('account/SET_CURRENT_SIGNER', {
-                address: Address.createFromRawAddress(this.currentAccount.address),
-                reset: false,
-                unsubscribeWS: true,
-            });
-        }
+    protected createDeadline(deadlineInHours = 2): Deadline {
+        const deadline = Deadline.create(this.epochAdjustment, deadlineInHours);
+        return Deadline.createFromAdjustedValue(deadline.adjustedValue + this.clientServerTimeDifference);
     }
 
     /**
@@ -288,6 +288,11 @@ export class FormTransactionBase extends Vue {
 
     protected getTransactionCommandMode(transactions: Transaction[]): TransactionCommandMode {
         if (this.isMultisigMode()) {
+            // If `requiredCosignatures` equals to one, we can announce it with AggregateComplete to skip the lock fees.
+            if (this.requiredCosignatures === 1) {
+                return TransactionCommandMode.AGGREGATE;
+            }
+
             return TransactionCommandMode.MULTISIGN;
         }
         if (transactions.length > 1) {
@@ -312,11 +317,12 @@ export class FormTransactionBase extends Vue {
             this.networkConfiguration,
             this.transactionFees,
             this.requiredCosignatures,
+            this.clientServerTimeDifference,
         );
     }
 
     protected get requiredCosignatures() {
-        return this.currentSignerMultisigInfo ? this.currentSignerMultisigInfo.minApproval : this.selectedSigner.requiredCosignatures;
+        return this.selectedSigner.requiredCosigApproval;
     }
 
     /**
@@ -375,5 +381,9 @@ export class FormTransactionBase extends Vue {
      */
     public onConfirmationCancel() {
         this.hasConfirmationModal = false;
+    }
+
+    public get submitButtonEnabled(): boolean {
+        return !!(this.transactionFeesLoadingFinished && this.clientServerTimeDifferenceLoadingFinished && !this.currentAccount.isMultisig);
     }
 }

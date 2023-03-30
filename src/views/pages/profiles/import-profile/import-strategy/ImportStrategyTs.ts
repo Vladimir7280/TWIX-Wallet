@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,17 @@ import { walletTypeImages } from '@/views/resources/Images';
 @Component
 export default class ImportStrategyTs extends Vue {
     /**
+     * Ledger is available only on Electron native app and development environment
+     * @returns {boolean}
+     */
+    public get isLedgerAvailable(): boolean {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isElectronApp = userAgent.indexOf(' electron/') > -1;
+
+        return isElectronApp || process.env.NODE_ENV === 'development';
+    }
+
+    /**
      * List of available follow-up pages
      * @var {any[]}
      */
@@ -28,13 +39,13 @@ export default class ImportStrategyTs extends Vue {
         {
             image: walletTypeImages.createImg,
             title: 'create_profile',
-            description: 'create_a_new_profile',
+            description: 'create_mnemonic_passphrase',
             route: 'profiles.createProfile.info',
         },
         {
             image: walletTypeImages.seedImg,
-            title: 'restore_profile',
-            description: 'restore_your_profile',
+            title: 'import_profile',
+            description: 'import_mnemonic_passphrase',
             route: 'profiles.importProfile.info',
         },
         {
@@ -53,7 +64,9 @@ export default class ImportStrategyTs extends Vue {
         if (!routeName || !routeName.length) {
             return this.$store.dispatch('notification/ADD_WARNING', this.$t('not_yet_open'));
         }
-
+        if (routeName === 'profiles.accessLedger.info' && !this.isLedgerAvailable) {
+            return;
+        }
         return this.$router.push({
             name: routeName,
             params: {

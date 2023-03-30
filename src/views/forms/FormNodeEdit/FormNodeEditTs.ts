@@ -58,7 +58,9 @@ export class FormNodeEditTs extends Vue {
      */
     public addPeer() {
         // validate and parse input
+        console.log('TESTTEST 14', this.formItems.nodeUrl);
         const nodeUrl = URLHelpers.getNodeUrl(this.formItems.nodeUrl);
+        console.log('TESTTEST 15', nodeUrl);
 
         // return if node already exists in the database
         if (this.knowNodes.find((node) => node.url === nodeUrl)) {
@@ -113,8 +115,11 @@ export class FormNodeEditTs extends Vue {
             this.customNodeData = [];
             return;
         }
+        console.log('TESTTEST 8', value);
         let associationValue: string = /.+\u003a\d{2,}/.test(value) ? value : value + ':3000';
+        console.log('TESTTEST 9', associationValue);
         associationValue = /https?\:\/\/.+/.test(associationValue) ? associationValue : 'http://' + associationValue;
+        console.log('TESTTEST 10', associationValue);
         this.customNodeData = !value ? [] : [associationValue];
     }
 }

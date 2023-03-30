@@ -5,22 +5,24 @@ import { Account, Address, NetworkType, Password, NamespaceId } from 'twix-sdk';
 // internal dependencies
 import { ProfileService } from '@/services/ProfileService';
 import { NotificationType } from '@/core/utils/NotificationType';
-import { AppStore } from '@/app/AppStore';
+import { AppStoreWrapper } from '@/app/AppStore';
 // configuration
 import { networkConfig, appConfig } from '@/config';
 import {
     AddressValidator,
     AliasValidator,
+    MaxRelativeAmountValidator,
     MaxDecimalsValidator,
     MaxMessageValidator,
     PublicKeyValidator,
+    PositiveDecimalNumberValidator,
     UrlValidator,
 } from './validators';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
 import { AccountService } from '@/services/AccountService';
 import { NetworkConfigurationModel } from '@/core/database/entities/NetworkConfigurationModel';
 import { Values } from 'vue-i18n';
-import { PositiveDecimalNumberValidator } from './validators/PositiveDecimalNumberValidator';
+import { StartsWithZeroValidator } from '@/core/validation/validators/StartsWithZeroValidator';
 
 // TODO CustomValidationRules needs to be created when the network configuration is resolved, UI
 // needs to use the resolved CustomValidationRules
@@ -50,6 +52,24 @@ export class CustomValidationRules {
             params: ['maxDecimalNumber'],
         });
 
+        extend('maxRelativeAmount', {
+            validate: (value, { maxMosaicAtomicUnits, maxMosaicDivisibility }: any) => {
+                const maxRelativeAmount =
+                    maxMosaicDivisibility === 0 ? maxMosaicAtomicUnits : maxMosaicAtomicUnits / Math.pow(10, maxMosaicDivisibility);
+                return MaxRelativeAmountValidator.validate(value, maxRelativeAmount);
+            },
+            message: (_fieldName: string, values: Values) =>
+                `${i18n.t('max_amount_error', {
+                    ...values,
+                    maxRelativeAmount: `${
+                        values['maxMosaicAtomicUnits'] === 0
+                            ? values['maxMosaicAtomicUnits']
+                            : values['maxMosaicAtomicUnits'] / Math.pow(10, values['maxMosaicDivisibility'])
+                    }`,
+                })}`,
+            params: ['maxMosaicAtomicUnits', 'maxMosaicDivisibility'],
+        });
+
         extend('maxMessage', {
             validate: (value, args: any) => {
                 const { maxMessageNumber } = args;
@@ -63,6 +83,10 @@ export class CustomValidationRules {
             validate: (value) => PositiveDecimalNumberValidator.validate(value),
             message: () => i18n.t('positive_decimal_error', { decimalSeparator: DECIMAL_SEPARATOR }).toString(),
         });
+        extend('startsWithZero', {
+            validate: (value) => StartsWithZeroValidator.validate(value),
+            message: () => i18n.t('amount_value_cannot_start_with_zero').toString(),
+        });
 
         extend('addressOrAlias', {
             validate: async (value) => {
@@ -72,8 +96,8 @@ export class CustomValidationRules {
                     return true;
                 }
                 if (isValidAlias) {
-                    await AppStore.dispatch('namespace/GET_LINKED_ADDRESS', new NamespaceId(value));
-                    return !!AppStore.getters['namespace/linkedAddress'];
+                    await AppStoreWrapper.getStore().dispatch('namespace/GET_LINKED_ADDRESS', new NamespaceId(value));
+                    return !!AppStoreWrapper.getStore().getters['namespace/linkedAddress'];
                 }
                 return false;
             },
@@ -122,7 +146,7 @@ export class CustomValidationRules {
                     return false;
                 }
 
-                const currentProfile: ProfileModel = AppStore.getters['profile/currentProfile'];
+                const currentProfile: ProfileModel = AppStoreWrapper.getStore().getters['profile/currentProfile'];
                 const currentHash = currentProfile.password;
                 const inputHash = ProfileService.getPasswordHash(new Password(value));
                 return inputHash === currentHash;
@@ -135,7 +159,7 @@ export class CustomValidationRules {
                 const accountService = new AccountService();
 
                 // - fetch current profile accounts
-                const currentProfile: ProfileModel = AppStore.getters['profile/currentProfile'];
+                const currentProfile: ProfileModel = AppStoreWrapper.getStore().getters['profile/currentProfile'];
                 const knownAccounts = Object.values(accountService.getKnownAccounts(currentProfile.accounts));
                 return undefined === knownAccounts.find((w) => value === w.name);
             },
@@ -151,13 +175,13 @@ export class CustomValidationRules {
                     return false;
                 }
             },
-            message: (_fieldName: string, values: Values) => `${i18n.t(NotificationType.PROFILE_NAME_EXISTS_ERROR, values)}`,
+            message: (_fieldName: string, values: Values) => `${i18n.t(NotificationType.PRIVATE_KEY_INVALID_ERROR, values)}`,
         });
 
         extend('addressOrPublicKey', {
             validate: (value) => {
                 const isValidAddress = AddressValidator.validate(value);
-                const currentProfile: ProfileModel = AppStore.getters['profile/currentProfile'];
+                const currentProfile: ProfileModel = AppStoreWrapper.getStore().getters['profile/currentProfile'];
                 const isValidPublicKey = PublicKeyValidator.validate(value, currentProfile.networkType);
                 if (isValidAddress || isValidPublicKey) {
                     return true;

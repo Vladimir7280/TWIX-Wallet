@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,5 +46,32 @@ export class CommonHelpers {
             }
             await this.sleep(interval);
         }
+    }
+    /**
+     * Traverses the tree object to pick addresses strings.
+     * @param {array} array of multisig children
+     * @param {parse} function to parse tree and pick children addresses
+     */
+    public static parseObjectProperties(obj: [], parse): void {
+        for (const k in obj) {
+            if (typeof obj[k] === 'object' && obj[k] !== null) {
+                this.parseObjectProperties(obj[k], parse);
+            } else if (Object.prototype.hasOwnProperty.call(obj, k)) {
+                parse(k, obj[k]);
+            }
+        }
+    }
+    /**
+     * Truncates the string if it is too long
+     * @protected
+     * @param {string} str
+     * @returns {string}
+     */
+    public static truncate(str: string): string {
+        const maxStringLength = 15;
+        if (str.length <= maxStringLength) {
+            return str;
+        }
+        return `${str.substring(0, 9)}...${str.substring(str.length - 3)}`;
     }
 }

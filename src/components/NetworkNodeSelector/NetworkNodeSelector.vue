@@ -19,7 +19,7 @@
                     <div v-if="!hideList" class="auto-complete-sub-container scroll">
                         <div v-if="!nodeExistsInList || hideList" class="custom-node-input-container">
                             <input
-                                v-model="customNode"
+                                v-model="customNodeUrl"
                                 :placeholder="$t('form_label_network_custom_node')"
                                 class="input-style input-size clickable-input"
                                 readonly="readonly"
@@ -32,7 +32,7 @@
                             </button>
                         </div>
                         <div v-for="(node, index) in filteredData" :key="index">
-                            <Option :value="node" :label="node">
+                            <Option :value="node" :label="node" role="listitem">
                                 <span>{{ node }}</span>
                             </Option>
                         </div>
