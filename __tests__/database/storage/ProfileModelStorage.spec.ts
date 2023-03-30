@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM Foundation (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import { ObjectStorageBackend } from '@/core/database/backends/ObjectStorageBack
 import { SimpleObjectStorage } from '@/core/database/backends/SimpleObjectStorage';
 import { VersionedModel } from '@/core/database/entities/VersionedModel';
 import { ProfileModel } from '@/core/database/entities/ProfileModel';
-import { defaultTestnetNetworkConfig } from '@/config';
 
 describe('storage/ProfileModelStorage.spec ==>', () => {
     describe('constructor() should', () => {
@@ -49,17 +48,6 @@ describe('storage/ProfileModelStorage.spec ==>', () => {
                         generationHash: '45FBCF2F0EA36EFA7923C9BC923D6503169651F7FA4EFC46A8EAF5AE09057EBD',
                         termsAndConditionsApproved: false,
                         selectedNodeUrlToConnect: 'http://api-01.us-west-1.testnet.symboldev.network:3000',
-                    },
-                    somePrivateNetwork: {
-                        profileName: 'somePrivateNetwork',
-                        accounts: ['1a', '2b', '3c'],
-                        seed: 'SomeSeed3',
-                        password: 'myPassword3',
-                        hint: '',
-                        networkType: NetworkType.PRIVATE_TEST,
-                        generationHash: 'AAAADA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6',
-                        termsAndConditionsApproved: false,
-                        selectedNodeUrlToConnect: 'http://private.network:3000',
                     },
                 },
             };
@@ -90,26 +78,12 @@ describe('storage/ProfileModelStorage.spec ==>', () => {
                     password: 'myPassword',
                     hint: '',
                     networkType: NetworkType.TEST_NET,
-                    generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155',
+                    generationHash: '49D6E1CE276A85B70EAFE52349AACCA389302E7A9754BCF1221E79494FC665A4',
                     termsAndConditionsApproved: false,
                     selectedNodeUrlToConnect: migratedData.someTestnetProfile.selectedNodeUrlToConnect,
                 },
-                somePrivateNetwork: {
-                    profileName: 'somePrivateNetwork',
-                    accounts: ['1a', '2b', '3c'],
-                    seed: 'SomeSeed3',
-                    password: 'myPassword3',
-                    hint: '',
-                    networkType: NetworkType.PRIVATE_TEST,
-                    generationHash: 'AAAADA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6',
-                    termsAndConditionsApproved: false,
-                    selectedNodeUrlToConnect: 'http://private.network:3000',
-                },
             };
 
-            expect(
-                defaultTestnetNetworkConfig.nodes.find((n) => n.url === migratedData.someTestnetProfile.selectedNodeUrlToConnect),
-            ).toBeDefined();
             expect(migratedData).toEqual(expected);
             expect(delegate.get()).toEqual({ version: 8, data: migratedData });
         });
@@ -139,17 +113,6 @@ describe('storage/ProfileModelStorage.spec ==>', () => {
                         generationHash: '57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6',
                         termsAndConditionsApproved: false,
                         selectedNodeUrlToConnect: 'http://api-01.testnet.symboldev.network:3000',
-                    },
-                    somePrivateNetwork: {
-                        profileName: 'somePrivateNetwork',
-                        accounts: ['1a', '2b', '3c'],
-                        seed: 'SomeSeed3',
-                        password: 'myPassword3',
-                        hint: '',
-                        networkType: NetworkType.PRIVATE_TEST,
-                        generationHash: '3B5E1FA6445653C971A50687E75E6D09FB30481055E3990C84B25E9222DC1155',
-                        termsAndConditionsApproved: false,
-                        selectedNodeUrlToConnect: 'http://private.network:3000',
                     },
                 },
             };

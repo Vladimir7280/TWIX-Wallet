@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 import { NetworkType, NodeInfo, NodeRepository, RepositoryFactory, RoleType } from 'twix-sdk';
 import { NodeService } from '@/services/NodeService';
-import { toArray } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { instance, mock, when } from 'ts-mockito';
+import { ProfileModel } from '@/core/database/entities/ProfileModel';
 
 const nodeService = new NodeService();
 const realUrl = 'http://api-01.us-west-1.symboldev.network:3000';
@@ -45,9 +45,21 @@ when(mockRepoFactory.getEpochAdjustment()).thenReturn(of(1573430400));
 when(mockRepoFactory.getNetworkType()).thenReturn(of(NetworkType.TEST_NET));
 const repositoryFactory = instance(mockRepoFactory);
 
+const fakeProfile: ProfileModel = {
+    profileName: 'fakeName',
+    generationHash: 'fakeGenHash',
+    hint: 'fakeHint',
+    networkType: NetworkType.TEST_NET,
+    password: 'fakePassword',
+    seed: 'fakeSeed',
+    accounts: [],
+    termsAndConditionsApproved: true,
+    selectedNodeUrlToConnect: 'fakeNode',
+};
+
 describe('services/NodeService', () => {
     test('getNodes', async () => {
-        const peers = await nodeService.getNodes(repositoryFactory, realUrl, NetworkType.TEST_NET).pipe(toArray()).toPromise();
+        const peers = await nodeService.getNodes(fakeProfile, repositoryFactory, realUrl, true);
         console.log(JSON.stringify(peers, null, 2));
     });
 });
