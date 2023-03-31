@@ -3,7 +3,7 @@
         <span class="label">{{ $t('metadata') }}:</span>
         <Select v-model="chosenValue" class="select-size select-style">
             <Option v-for="metadataModel in metadataList" :key="metadataModel.metadataId" :value="metadataModel.metadataId">
-                {{ `${metadataModel.scopedMetadataKey} : ${metadataModel.value}` }}
+                {{ `${metadataModel.scopedMetadataKey}` }}
             </Option>
         </Select>
         <div>

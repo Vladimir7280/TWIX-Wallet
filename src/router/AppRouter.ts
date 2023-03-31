@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import Router, { RawLocation } from 'vue-router';
 import { routes } from '@/router/routes';
 import { AppRoute } from './AppRoute';
 import { TabEntry } from './TabEntry';
-import { AppStore } from '@/app/AppStore';
 import { ProfileService } from '@/services/ProfileService';
 
 /**
@@ -56,7 +55,7 @@ export class AppRouter extends Router {
                 return next(/* no-redirect */);
             }
 
-            const isAuthenticated = AppStore.getters['profile/isAuthenticated'] === true;
+            const isAuthenticated = this.app.$store.getters['profile/isAuthenticated'] === true;
             if (!isAuthenticated) {
                 return next({ name: 'profiles.login' });
             }
@@ -70,6 +69,7 @@ export class AppRouter extends Router {
      * @param {string} [parentRouteName]
      * @returns {AppRoute[]}
      */
+    // @ts-ignore
     public getRoutes(parentRouteName?: string): AppRoute[] {
         const parentRoute = this.getParentRoute(parentRouteName);
         if (!parentRoute) {

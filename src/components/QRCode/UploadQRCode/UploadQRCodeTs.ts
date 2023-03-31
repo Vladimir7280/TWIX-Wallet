@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 NEM (https://nem.io)
+ * (C) Symbol Contributors 2021
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,16 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { QrcodeCapture, QrcodeDropZone, QrcodeStream } from 'vue-qrcode-reader';
 import { QRCodeType } from 'symbol-qr-library';
+import { mapGetters } from 'vuex';
 
+declare type QrCapturer = typeof QrcodeCapture;
 @Component({
     components: { QrcodeCapture, QrcodeDropZone, QrcodeStream },
+    computed: {
+        ...mapGetters({
+            feesConfig: 'network/feesConfig',
+        }),
+    },
 })
 export default class UploadQRCodeTs extends Vue {
     @Prop({ default: true })
@@ -35,7 +42,13 @@ export default class UploadQRCodeTs extends Vue {
 
     @Prop({ default: 'upload_file_message' })
     readonly uploadFileMessage!: string;
-
+    private feesConfig: {
+        fast: number;
+        median: number;
+        slow: number;
+        slowest: number;
+        free: number;
+    };
     /**
      * Whether scan tab is active
      */
@@ -62,7 +75,7 @@ export default class UploadQRCodeTs extends Vue {
     invalidType: boolean = false;
 
     public $refs!: {
-        qrcodeCapture: QrcodeCapture;
+        qrcodeCapture: QrCapturer;
     };
 
     /**
@@ -71,6 +84,9 @@ export default class UploadQRCodeTs extends Vue {
      * @param json
      */
     public onDecode(json) {
+        if (!this.feesConfig) {
+            this.$store.dispatch('network/LOAD_TRANSACTION_FEES');
+        }
         const jsonObj = JSON.parse(json);
         this.qrType = jsonObj.type;
         if (this.validQrTypes.includes(this.qrType)) {
@@ -93,7 +109,7 @@ export default class UploadQRCodeTs extends Vue {
      * It intercepts the upload process and pass the file to qrcodeCapture component
      * @param file uploaded
      */
-    public onBeforeUpload(file) {
+    public async onBeforeUpload(file) {
         this.reset();
         const evt = {
             target: {
@@ -102,14 +118,21 @@ export default class UploadQRCodeTs extends Vue {
         };
         this.$refs.qrcodeCapture.onChangeInput(evt); // to pass the evt to qrcode image decoder
         this.imageFileName = file.name;
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(file);
-        fileReader.onload = (event) => {
-            // called once readAsDataURL is completed
-            this.image = event.target.result as string;
-        };
+        this.image = await this.readFile(file);
 
         return false; //return false now since we have the file passed to qrcodeCapture component
+    }
+
+    private readFile(file): Promise<string> {
+        return new Promise((resolve) => {
+            const fileReader = new FileReader();
+
+            fileReader.readAsDataURL(file);
+            fileReader.onload = (event) => {
+                const result = event.target.result as string;
+                resolve(result);
+            };
+        });
     }
 
     private reset() {
