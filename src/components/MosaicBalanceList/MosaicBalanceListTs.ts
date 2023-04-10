@@ -32,6 +32,7 @@ export interface BalanceEntry {
     name: string;
     amount: number;
     mosaic: MosaicModel;
+    mosaicIcon: string;
 }
 
 @Component({
@@ -101,6 +102,7 @@ export class MosaicBalanceListTs extends Vue {
                 name: mosaic.name || mosaic.mosaicIdHex,
                 amount: mosaic.balance || 0,
                 mosaic: mosaic,
+                mosaicIcon: mosaic.metadataList[(mosaic.metadataList.findIndex(x => x.scopedMetadataKey == '9271ACDBD57BCE79'))]? mosaic.metadataList[(mosaic.metadataList.findIndex(x => x.scopedMetadataKey == '9271ACDBD57BCE79'))].value : undefined,
             };
         });
     }

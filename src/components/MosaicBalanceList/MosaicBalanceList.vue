@@ -6,6 +6,7 @@
                     <div v-for="(entry, index) in filteredBalanceEntries" :key="index" class="mosaic_data">
                         <span class="img_container">
                             <img v-if="entry.id.equals(networkMosaic)" src="@/views/resources/img/symbol/XYMCoin.png" alt />
+                            <img v-else-if="entry.mosaicIcon" :src="entry.mosaicIcon" alt />
                             <img v-else src="@/views/resources/img/symbol/XYMCoin.png" class="grayed-xym-logo" />
                         </span>
                         <span class="mosaic_name">{{ entry.name !== '' ? entry.name : entry.id.toHex() }}</span>
@@ -53,6 +54,7 @@
                                 :src="isMosaicHidden(entry.id) ? dashboardImages.unselected : dashboardImages.selected"
                             />
                             <img v-if="entry.id.equals(networkMosaic)" src="@/views/resources/img/symbol/XYMCoin.png" class="mosaicIcon" />
+                            <img v-else-if="entry.mosaicIcon" :src="entry.mosaicIcon" class="mosaicIcon" />
                             <img v-else src="@/views/resources/img/symbol/XYMCoin.png" class="mosaicIcon grayed-xym-logo" />
                         </span>
                         <span class="mosaic_name">

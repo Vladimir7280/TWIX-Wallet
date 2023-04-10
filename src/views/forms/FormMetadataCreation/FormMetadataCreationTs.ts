@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  *
  */
-import { Address, MetadataType, PublicAccount, RepositoryFactory, Transaction } from 'twix-sdk';
+import { Address, MetadataType, PublicAccount, RepositoryFactory, Transaction, UInt64, KeyGenerator } from 'twix-sdk';
 // @ts-ignore
 import ErrorTooltip from '@/components/ErrorTooltip/ErrorTooltip.vue';
 // @ts-ignore
@@ -140,6 +140,7 @@ export class FormMetadataCreationTs extends FormTransactionBase {
         targetName: '',
         metadataValue: '',
         scopedKey: '',
+        scopedKeyAscii: '',
         maxFee: 0,
     };
 
@@ -193,6 +194,7 @@ export class FormMetadataCreationTs extends FormTransactionBase {
         // - set default form values
         this.formItems.metadataValue = '';
         this.formItems.scopedKey = '';
+        this.formItems.scopedKeyAscii = '';
 
         // - maxFee must be absolute
         this.formItems.maxFee = this.defaultFee;
@@ -303,12 +305,14 @@ export class FormMetadataCreationTs extends FormTransactionBase {
         const metadataForm: {
             targetAddress: Address;
             scopedKey: string;
+            scopedKeyAscii: string;
             metadataValue: string;
             targetId: string;
             maxFee: number;
         } = {
             targetAddress,
-            scopedKey: this.formItems.scopedKey,
+            scopedKey: this.formItems.scopedKey? this.formItems.scopedKey : this.formItems.scopedKeyAscii? KeyGenerator.generateUInt64Key(this.formItems.scopedKeyAscii).toHex() : '',
+            scopedKeyAscii: this.formItems.scopedKeyAscii,
             metadataValue: this.formItems.metadataValue,
             targetId: this.formItems.targetId,
             maxFee: this.formItems.maxFee,
@@ -340,7 +344,8 @@ export class FormMetadataCreationTs extends FormTransactionBase {
             this.formItems.signerAddress.length > 0 ||
             this.formItems.targetAccount.length > 0 ||
             this.formItems.metadataValue.length > 0 ||
-            this.formItems.scopedKey.length > 0
+            this.formItems.scopedKey.length > 0 ||
+            this.formItems.scopedKeyAscii.length > 0
         );
     }
 
@@ -378,6 +383,7 @@ export class FormMetadataCreationTs extends FormTransactionBase {
             this.formItems.targetId = this.type === MetadataType.Mosaic ? selectedItem.targetId : this.formItems.targetName;
             this.formItems.metadataValue = selectedItem.value;
             this.formItems.scopedKey = selectedItem.scopedMetadataKey;
+            this.formItems.scopedKeyAscii = selectedItem.scopedKeyAscii;
         }
     }
 

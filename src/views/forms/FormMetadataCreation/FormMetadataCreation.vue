@@ -90,6 +90,28 @@
                             </Select>
                         </template>
                     </FormRow>
+                    <FormRow v-else>
+                        <template v-slot:label> {{ $t('form_label_scoped_metadata_key_human') }}: </template>
+                        <template v-slot:inputs>
+                            <ValidationProvider
+                                v-slot="{ errors }"
+                                vid="form_label_scoped_metadata_key_human"
+                                mode="lazy"
+                                :name="$t('form_label_scoped_metadata_key_human')"
+                                :rules="'required'"
+                                tag="div"
+                                class="row-metadata-input value-container"
+                            >
+                                <ErrorTooltip :errors="errors">
+                                    <textarea
+                                        v-model="formItems.scopedKeyAscii"
+                                        class="metadatakey-value-input"
+                                        :placeholder="$t('form_label_scoped_metadata_key_human_hint')"
+                                    />
+                                </ErrorTooltip>
+                            </ValidationProvider>
+                        </template>
+                    </FormRow>
                     <FormRow>
                         <template v-slot:label> {{ $t('form_label_value') }}: </template>
                         <template v-slot:inputs>

@@ -87,6 +87,19 @@ export class MetadataService {
                 uniqueMetaArray.push(value);
             }
         });
+
+        const targetIdSearchCriteria: MetadataSearchCriteria = { metadataType: 1 };
+            const targetIdMetaList = await metadataRepository
+            .search(targetIdSearchCriteria)
+            .pipe(map((metadataListPage) => metadataListPage.data.map((metadata) => new MetadataModel(metadata))))
+            .toPromise();
+
+            targetIdMetaList.map((value) => {
+            if (!uniqueMetaArray.find((o) => o.metadataId === value.metadataId)) {
+                uniqueMetaArray.push(value);
+            }
+        });
+
         return uniqueMetaArray;
     }
 
