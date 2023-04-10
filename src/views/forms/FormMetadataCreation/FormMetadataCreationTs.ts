@@ -383,7 +383,6 @@ export class FormMetadataCreationTs extends FormTransactionBase {
             this.formItems.targetId = this.type === MetadataType.Mosaic ? selectedItem.targetId : this.formItems.targetName;
             this.formItems.metadataValue = selectedItem.value;
             this.formItems.scopedKey = selectedItem.scopedMetadataKey;
-            this.formItems.scopedKeyAscii = selectedItem.scopedKeyAscii;
         }
     }
 
